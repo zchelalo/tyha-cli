@@ -26,7 +26,7 @@ export function createProject() {
       else if (options.grpc) template = Template.GRPC
 
       console.log(chalk.green(`Creando proyecto "${name}" con plantilla ${template}...`))
-      await Files.copyDirectory(join(TEMPLATES, template), name ? name : 'project')
+      await Files.copyDirectory(join(TEMPLATES, template), name || 'project')
       console.log(chalk.blue('Proyecto creado exitosamente'))
     })
 }

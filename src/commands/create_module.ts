@@ -10,8 +10,8 @@ export function createProject() {
     .argument('[name]', 'Nombre del módulo')
     .option('-f, --full', 'Crear un módulo con todas las capas', false)
     .option('-d, --domain', 'Crear un módulo con solo la capa de dominio', false)
-    .description('Crea un nuevo proyecto')
-    .action(async (name: string | undefined, options: { auth?: boolean, grpc?: boolean }) => {
+    .description('Crea un nuevo modulo')
+    .action(async (name: string | undefined, options: { full?: boolean, domain?: boolean }) => {
       try {
         
       } catch (error: unknown) {

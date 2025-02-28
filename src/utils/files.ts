@@ -16,9 +16,7 @@ export class Files {
       if (isError(error) && error.code === 'EPERM') throw new Error(`No tienes permisos para verificar la existencia del archivo en la ruta ${filePath}`)
       if (isError(error) && error.code === 'EISDIR') throw new Error(`La ruta ${filePath} es un directorio`)
 
-      if (error instanceof Error) {
-        throw new Error(`Error al verificar la existencia del archivo: ${error.message}`)
-      }
+      if (error instanceof Error) throw new Error(`Error al verificar la existencia del archivo: ${error.message}`)
 
       throw new Error('Error al verificar la existencia del archivo')
     }
@@ -34,9 +32,7 @@ export class Files {
       if (isError(error) && error.code === 'EPERM') throw new Error(`No tienes permisos para leer el archivo en la ruta ${filePath}`)
       if (isError(error) && error.code === 'EISDIR') throw new Error(`La ruta ${filePath} es un directorio`)
 
-      if (error instanceof Error) {
-        throw new Error(`Error al leer el archivo en la ruta ${filePath}: ${error.message}`)
-      }
+      if (error instanceof Error) throw new Error(`Error al leer el archivo en la ruta ${filePath}: ${error.message}`)
 
       throw new Error('Error al leer el archivo')
     }
@@ -52,9 +48,7 @@ export class Files {
       if (isError(error) && error.code === 'EPERM') throw new Error(`No tienes permisos para escribir en la ruta ${filePath}`)
       if (isError(error) && error.code === 'EISDIR') throw new Error(`La ruta ${filePath} es un directorio`)
 
-      if (error instanceof Error) {
-        throw new Error(`Error al escribir en el archivo en la ruta ${filePath}: ${error.message}`)
-      }
+      if (error instanceof Error) throw new Error(`Error al escribir en el archivo en la ruta ${filePath}: ${error.message}`)
 
       throw new Error('Error al escribir en el archivo')
     }
@@ -70,9 +64,7 @@ export class Files {
       if (isError(error) && error.code === 'EPERM') throw new Error(`No tienes permisos para eliminar el archivo en la ruta ${filePath}`)
       if (isError(error) && error.code === 'EISDIR') throw new Error(`La ruta ${filePath} es un directorio`)
 
-      if (error instanceof Error) {
-        throw new Error(`Error al eliminar el archivo en la ruta ${filePath}: ${error.message}`)
-      }
+      if (error instanceof Error) throw new Error(`Error al eliminar el archivo en la ruta ${filePath}: ${error.message}`)
 
       throw new Error('Error al eliminar el archivo')
     }
@@ -88,9 +80,7 @@ export class Files {
       if (isError(error) && error.code === 'EPERM') throw new Error(`No tienes permisos para crear el directorio en la ruta ${directoryPath}`)
       if (isError(error) && error.code === 'EISDIR') throw new Error(`La ruta ${directoryPath} es un archivo`)
 
-      if (error instanceof Error) {
-        throw new Error(`Error al crear el directorio en la ruta ${directoryPath}: ${error.message}`)
-      }
+      if (error instanceof Error) throw new Error(`Error al crear el directorio en la ruta ${directoryPath}: ${error.message}`)
 
       throw new Error('Error al crear el directorio')
     }
@@ -106,9 +96,7 @@ export class Files {
       if (isError(error) && error.code === 'ENOTDIR') throw new Error(`La ruta ${destinationPath} es un directorio`)
       if (isError(error) && error.code === 'EPERM') throw new Error(`No tienes permisos para copiar el archivo en la ruta ${destinationPath}`)
 
-      if (error instanceof Error) {
-        throw new Error(`Error al copiar el archivo en la ruta ${sourcePath} a ${destinationPath}: ${error.message}`)
-      }
+      if (error instanceof Error) throw new Error(`Error al copiar el archivo en la ruta ${sourcePath} a ${destinationPath}: ${error.message}`)
 
       throw new Error('Error al copiar el archivo')
     }
@@ -125,11 +113,35 @@ export class Files {
       if (isError(error) && error.code === 'EPERM') throw new Error(`No tienes permisos para copiar el directorio en la ruta ${destinationPath}`)
       if (isError(error) && error.code === 'EEXIST') throw new Error(`El directorio en la ruta ${destinationPath} ya existe`)
 
-      if (error instanceof Error) {
-        throw new Error(`Error al copiar el directorio en la ruta ${sourcePath} a ${destinationPath}: ${error.message}`)
-      }
+      if (error instanceof Error) throw new Error(`Error al copiar el directorio en la ruta ${sourcePath} a ${destinationPath}: ${error.message}`)
 
       throw new Error('Error al copiar el directorio')
     }
   }
+
+  static async replaceInFile(filePath: string, searchValue: string, replaceValue: string): Promise<void> {
+    try {
+      let fileContent = await this.readFile(filePath)
+
+      const safeSearchValue = escapeRegExp(searchValue)
+      const regex = new RegExp(safeSearchValue, 'g')
+
+      fileContent = fileContent.replace(regex, replaceValue)
+
+      await this.writeFile(filePath, fileContent)
+    } catch (error) {
+      if (isError(error) && error.code === 'ENOENT') throw new Error(`El archivo en la ruta ${filePath} no existe`)
+      if (isError(error) && error.code === 'EACCES') throw new Error(`No tienes permisos para leer el archivo en la ruta ${filePath}`)
+      if (isError(error) && error.code === 'EISDIR') throw new Error(`La ruta ${filePath} es un directorio`)
+      if (isError(error) && error.code === 'EPERM') throw new Error(`No tienes permisos para leer el archivo en la ruta ${filePath}`)
+
+      if (error instanceof Error) throw new Error(`Error al reemplazar en el archivo en la ruta ${filePath}: ${error.message}`)
+
+      throw new Error('Error al reemplazar en el archivo')
+    }
+  }
+}
+
+function escapeRegExp(text: string): string {
+  return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 }

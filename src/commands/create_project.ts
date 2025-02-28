@@ -8,7 +8,7 @@ import { Template, TEMPLATES } from 'src/config/constants.js'
 import { Files } from 'src/utils/files.js'
 
 export function createProject() {
-  return new Command('create')
+  return new Command('create:project')
     .argument('[name]', 'Nombre del proyecto')
     .option('-a, --auth', 'Crear un proyecto con autenticación', false)
     .option('-g, --grpc', 'Crear un proyecto con gRPC', false)
@@ -26,8 +26,13 @@ export function createProject() {
         if (options.auth) template = Template.AUTH
         else if (options.grpc) template = Template.GRPC
 
+        const projectName = name || 'project'
+
         console.log(chalk.green(`Creando proyecto "${name}" con plantilla ${template}...`))
-        await Files.copyDirectory(join(TEMPLATES, template), name || 'project')
+        await Files.copyDirectory(join(TEMPLATES, template), projectName)
+
+        await Files.replaceInFile(join(projectName, 'package.json'), '{{name}}', projectName)
+
         console.log(chalk.blue('Proyecto creado exitosamente'))
       } catch (error: unknown) {
         if (error instanceof Error) {

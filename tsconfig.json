@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "src/*": ["src/*"]
+    },
+    "module": "NodeNext",
+    "target": "esnext",
+    "moduleResolution": "nodenext",
+    "allowImportingTsExtensions": false,
+    "noEmit": false,
+    "esModuleInterop": true,
+    "strict": true,
+    "sourceMap": true,
+    "inlineSources": true,
+    "skipLibCheck": true,
+    "alwaysStrict": true,
+    "noImplicitAny": true,
+    "resolveJsonModule": true,
+    "outDir": "dist",
+    "rootDir": "src",
+    "plugins": [
+      {
+        "transform": "typescript-transform-paths"
+      }
+    ]
+  },
+  "exclude": ["node_modules", "dist", "DB", "docs", "templates"]
+}

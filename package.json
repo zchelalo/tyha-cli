@@ -1,0 +1,30 @@
+{
+  "name": "tyha",
+  "version": "1.0.0",
+  "description": "CLI to create projects with typescript and hexagonal architecture",
+  "bin": "./dist/bin/index.js",
+  "type": "module",
+  "scripts": {
+    "create:docs": "typedoc --entryPointStrategy expand ./src --name 'Tyha CLI test' --out docs",
+    "build": "tsc",
+    "dev": "nodemon"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^5.4.1",
+    "commander": "^13.1.0",
+    "inquirer": "^12.4.2"
+  },
+  "devDependencies": {
+    "@types/chalk": "^0.4.31",
+    "@types/commander": "^2.12.0",
+    "@types/inquirer": "^9.0.7",
+    "ts-patch": "^3.3.0",
+    "tsx": "^4.17.0",
+    "typedoc": "^0.26.5",
+    "typescript": "^5.5.4",
+    "typescript-transform-paths": "^3.5.3"
+  }
+}

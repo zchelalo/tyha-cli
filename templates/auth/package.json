@@ -15,7 +15,7 @@
     "migration:push": "docker exec -it {{name}}_app npx tsx ./src/data/drizzle/config/migrate.ts",
     "migration:seed": "docker exec -it {{name}}_app npx tsx ./src/data/drizzle/config/seed.ts",
     "migrate": "npm run migration:generate && npm run migration:push",
-    "build": "npx ts-patch install && tsc",
+    "build": "ts-patch install && tsc",
     "test": "NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --detectOpenHandles || true",
     "dev": "nodemon"
   },

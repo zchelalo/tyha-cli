@@ -6,6 +6,7 @@ import { join } from 'path'
 import { Template, TEMPLATES } from 'src/config/constants.js'
 
 import { Files } from 'src/utils/files.js'
+import { Strings } from 'src/utils/strings.js'
 
 export function createProject() {
   return new Command('create:project')
@@ -31,11 +32,11 @@ export function createProject() {
         console.log(chalk.green(`Creando proyecto "${name}" con plantilla ${template}...`))
         await Files.copyDirectory(join(TEMPLATES, template), projectName)
 
-        await Files.replaceInFile(join(projectName, 'package.json'), '{{name}}', projectName)
-        await Files.replaceInFile(join(projectName, '.env.example'), '{{name}}', projectName)
-        await Files.replaceInFile(join(projectName, '.env.test'), '{{name}}', projectName)
-        await Files.replaceInFile(join(projectName, 'README.md'), '{{name}}', projectName)
-        await Files.replaceInFile(join(projectName, '.dockers/compose.yml'), '{{name}}', projectName)
+        await Files.replaceInFile(join(projectName, 'package.json'), '{{name}}', Strings.clean(projectName))
+        await Files.replaceInFile(join(projectName, '.env.example'), '{{name}}', Strings.clean(projectName))
+        await Files.replaceInFile(join(projectName, '.env.test'), '{{name}}', Strings.clean(projectName))
+        await Files.replaceInFile(join(projectName, 'README.md'), '{{name}}', Strings.fistLetterToUpperCase(projectName))
+        await Files.replaceInFile(join(projectName, '.dockers/compose.yml'), '{{name}}', Strings.clean(projectName))
 
         console.log(chalk.blue('Proyecto creado exitosamente'))
       } catch (error: unknown) {

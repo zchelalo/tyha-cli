@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "create:docs": "typedoc --entryPointStrategy expand ./src --name 'Tyha CLI test' --out docs",
-    "build": "tsc",
+    "build": "ts-patch install && tsc",
     "dev": "nodemon"
   },
   "keywords": [],

@@ -7,4 +7,5 @@ export enum Template {
   REST = 'rest',
   AUTH = 'auth',
   GRPC = 'grpc',
+  WEB_SOCKET = 'web_socket',
 }

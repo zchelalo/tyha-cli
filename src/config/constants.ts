@@ -7,5 +7,20 @@ export enum Template {
   REST = 'rest',
   AUTH = 'auth',
   GRPC = 'grpc',
-  WEB_SOCKET = 'web_socket',
+}
+
+export const TEMPLATE_ROUTES: Record<Template, string> = {
+  [Template.REST]: 'projects/rest',
+  [Template.AUTH]: 'projects/auth',
+  [Template.GRPC]: 'projects/grpc',
+}
+
+export enum ModuleType {
+  FULL = 'full',
+  ONLY_DOMAIN = 'only_domain',
+}
+
+export const MODULE_ROUTES: Record<ModuleType, string> = {
+  [ModuleType.FULL]: 'modules/full',
+  [ModuleType.ONLY_DOMAIN]: 'modules/only_domain',
 }

@@ -3,10 +3,18 @@ import chalk from 'chalk'
 import inquirer from 'inquirer'
 import { join } from 'path'
 
-import { Template, TEMPLATES } from 'src/config/constants.js'
+import { Template, TEMPLATE_ROUTES, TEMPLATES } from 'src/config/constants.js'
 
 import { Files } from 'src/utils/files.js'
 import { Strings } from 'src/utils/strings.js'
+
+interface NameAnswer {
+  name: string
+}
+
+interface TemplateAnswers {
+  template: Template
+}
 
 export function createProject() {
   return new Command('create:project')
@@ -15,13 +23,13 @@ export function createProject() {
     .action(async (name: string | undefined) => {
       try {
         if (!name) {
-          const nameAnswer = await inquirer.prompt([
+          const nameAnswer = await inquirer.prompt<NameAnswer>([
             { type: 'input', name: 'name', message: '¿Qué nombre tendrá el proyecto?' },
           ])
           name = nameAnswer.name
         }
 
-        const templateAnswers = await inquirer.prompt([
+        const templateAnswers = await inquirer.prompt<TemplateAnswers>([
           {
             type: 'list',
             name: 'template',
@@ -35,16 +43,14 @@ export function createProject() {
         ])
         const template = templateAnswers.template
 
-        const projectName = name || 'project'
+        console.log(chalk.green(`Creando proyecto "${Strings.fistLetterToUpperCase(name)}" con plantilla ${Strings.fistLetterToUpperCase(template)}...`))
+        await Files.copyDirectory(TEMPLATE_ROUTES[template], name)
 
-        console.log(chalk.green(`Creando proyecto "${name}" con plantilla ${template}...`))
-        await Files.copyDirectory(join(TEMPLATES, template), projectName)
-
-        await Files.replaceInFile(join(projectName, 'package.json'), '{{name}}', Strings.clean(projectName))
-        await Files.replaceInFile(join(projectName, '.env.example'), '{{name}}', Strings.clean(projectName))
-        await Files.replaceInFile(join(projectName, '.env.test'), '{{name}}', Strings.clean(projectName))
-        await Files.replaceInFile(join(projectName, 'README.md'), '{{name}}', Strings.fistLetterToUpperCase(projectName))
-        await Files.replaceInFile(join(projectName, '.dockers/compose.yml'), '{{name}}', Strings.clean(projectName))
+        await Files.replaceInFile(join(TEMPLATE_ROUTES[template], 'package.json'), '{{name}}', Strings.clean(name))
+        await Files.replaceInFile(join(TEMPLATE_ROUTES[template], '.env.example'), '{{name}}', Strings.clean(name))
+        await Files.replaceInFile(join(TEMPLATE_ROUTES[template], '.env.test'), '{{name}}', Strings.clean(name))
+        await Files.replaceInFile(join(TEMPLATE_ROUTES[template], 'README.md'), '{{name}}', Strings.fistLetterToUpperCase(name))
+        await Files.replaceInFile(join(TEMPLATE_ROUTES[template], '.dockers/compose.yml'), '{{name}}', Strings.clean(name))
 
         console.log(chalk.blue('Proyecto creado exitosamente'))
       } catch (error: unknown) {

@@ -43,22 +43,24 @@ export function createProject() {
         ])
         const template = templateAnswers.template
 
-        console.log(chalk.green(`Creando proyecto "${Strings.fistLetterToUpperCase(name)}" con plantilla ${Strings.fistLetterToUpperCase(template)}...`))
-        await Files.copyDirectory(TEMPLATE_ROUTES[template], name)
+        const projectPath = Strings.clean(name)
 
-        await Files.replaceInFile(join(TEMPLATE_ROUTES[template], 'package.json'), '{{name}}', Strings.clean(name))
-        await Files.replaceInFile(join(TEMPLATE_ROUTES[template], '.env.example'), '{{name}}', Strings.clean(name))
-        await Files.replaceInFile(join(TEMPLATE_ROUTES[template], '.env.test'), '{{name}}', Strings.clean(name))
-        await Files.replaceInFile(join(TEMPLATE_ROUTES[template], 'README.md'), '{{name}}', Strings.fistLetterToUpperCase(name))
-        await Files.replaceInFile(join(TEMPLATE_ROUTES[template], '.dockers/compose.yml'), '{{name}}', Strings.clean(name))
+        console.log(chalk.green(`Creando proyecto "${Strings.fistLetterToUpperCase(name)}" con plantilla ${Strings.fistLetterToUpperCase(template)}...`))
+        await Files.copyDirectory(join(TEMPLATES, TEMPLATE_ROUTES[template]), projectPath)
+
+        await Files.replaceInFile(join(projectPath, 'package.json'), '{{name}}', projectPath)
+        await Files.replaceInFile(join(projectPath, '.env.example'), '{{name}}', projectPath)
+        await Files.replaceInFile(join(projectPath, '.env.test'), '{{name}}', projectPath)
+        await Files.replaceInFile(join(projectPath, 'README.md'), '{{name}}', Strings.fistLetterToUpperCase(name))
+        await Files.replaceInFile(join(projectPath, '.dockers/compose.yml'), '{{name}}', projectPath)
 
         console.log(chalk.blue('Proyecto creado exitosamente'))
       } catch (error: unknown) {
         if (error instanceof Error) {
           console.error(chalk.red(`Error: ${error.message}`))
-        } else {
-          console.error(chalk.red('Ha ocurrido un error inesperado.'))
+          return
         }
+        console.error(chalk.red('Ha ocurrido un error inesperado.'))
       }
     })
 }

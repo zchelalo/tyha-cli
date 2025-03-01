@@ -9,6 +9,7 @@ export class Strings {
 
   static clean(str: string): string {
     const noSpaces = str.trim().replace(/\s/g, '_')
-    return noSpaces.replace(/[^a-zA-Z0-9_]/g, '')
+    const cleaned = noSpaces.replace(/[^a-zA-Z0-9_]/g, '')
+    return cleaned.toLowerCase()
   }
 }

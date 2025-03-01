@@ -22,6 +22,22 @@ export class Files {
     }
   }
 
+  static async directoryExists(directoryPath: string): Promise<boolean> {
+    try {
+      await fs.access(directoryPath, fs.constants.F_OK)
+      return true
+    } catch (error) {
+      if (isError(error) && error.code === 'ENOENT') return false
+      if (isError(error) && error.code === 'EACCES') throw new Error(`No tienes permisos para verificar la existencia del directorio en la ruta ${directoryPath}`)
+      if (isError(error) && error.code === 'EISDIR') throw new Error(`La ruta ${directoryPath} es un archivo`)
+      if (isError(error) && error.code === 'EPERM') throw new Error(`No tienes permisos para verificar la existencia del directorio en la ruta ${directoryPath}`)
+
+      if (error instanceof Error) throw new Error(`Error al verificar la existencia del directorio: ${error.message}`)
+
+      throw new Error('Error al verificar la existencia del directorio')    
+    }
+  }
+
   static async readFile(filePath: string): Promise<string> {
     try {
       return await fs.readFile(filePath, 'utf-8')

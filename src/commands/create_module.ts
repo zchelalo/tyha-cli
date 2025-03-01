@@ -3,7 +3,7 @@ import chalk from 'chalk'
 import inquirer from 'inquirer'
 import { join } from 'path'
 
-import { MODULE_ROUTES, ModuleType } from 'src/config/constants.js'
+import { MODULE_ROUTES, ModuleType, TEMPLATES } from 'src/config/constants.js'
 
 import { Files } from 'src/utils/files.js'
 import { Strings } from 'src/utils/strings.js'
@@ -16,7 +16,7 @@ interface ModuleTypeAnswers {
   moduleType: ModuleType
 }
 
-export function createProject() {
+export function createModule() {
   return new Command('create:module')
     .argument('[name]', 'Nombre del módulo')
     .description('Crea un nuevo modulo')
@@ -42,10 +42,30 @@ export function createProject() {
         ])
         const moduleType = moduleTypeAnswers.moduleType
 
+        if (!await Files.directoryExists('src/modules')) {
+          console.error(chalk.red(`Error: No se ha encontrado el directorio "src/modules".`))
+          return
+        }
+
+        const modulePath = join('src/modules', Strings.clean(name))
+
+        if (await Files.directoryExists(modulePath)) {
+          console.error(chalk.red(`Error: El módulo "${name}" ya existe.`))
+          return
+        }
+
         console.log(chalk.green(`Creando módulo "${name}" de tipo ${Strings.fistLetterToUpperCase(moduleType)}...`))
-        await Files.copyDirectory(MODULE_ROUTES[moduleType], name)
+        await Files.copyDirectory(join(TEMPLATES, MODULE_ROUTES[moduleType]), modulePath)
+
+        // await Files.replaceInFile(join(modulePath, 'package.json'), '{{name}}', Strings.clean(name))
+
+        console.log(chalk.blue('Proyecto creado exitosamente'))
       } catch (error: unknown) {
-        
+        if (error instanceof Error) {
+          console.error(chalk.red(`Error: ${error.message}`))
+          return
+        }
+        console.error(chalk.red('Ha ocurrido un error inesperado.'))
       }
     })
 }

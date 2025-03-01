@@ -17,7 +17,7 @@ export function createProject() {
       try {
         if (!name) {
           const answers = await inquirer.prompt([
-            { type: 'input', name: 'name', message: '¿Nombre del proyecto?' },
+            { type: 'input', name: 'name', message: '¿Qué nombre tendrá el proyecto?' },
           ])
           name = answers.name
         }
@@ -32,6 +32,10 @@ export function createProject() {
         await Files.copyDirectory(join(TEMPLATES, template), projectName)
 
         await Files.replaceInFile(join(projectName, 'package.json'), '{{name}}', projectName)
+        await Files.replaceInFile(join(projectName, '.env.example'), '{{name}}', projectName)
+        await Files.replaceInFile(join(projectName, '.env.test'), '{{name}}', projectName)
+        await Files.replaceInFile(join(projectName, 'README.md'), '{{name}}', projectName)
+        await Files.replaceInFile(join(projectName, '.dockers/compose.yml'), '{{name}}', projectName)
 
         console.log(chalk.blue('Proyecto creado exitosamente'))
       } catch (error: unknown) {

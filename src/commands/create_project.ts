@@ -11,21 +11,29 @@ import { Strings } from 'src/utils/strings.js'
 export function createProject() {
   return new Command('create:project')
     .argument('[name]', 'Nombre del proyecto')
-    .option('-a, --auth', 'Crear un proyecto con autenticación', false)
-    .option('-g, --grpc', 'Crear un proyecto con gRPC', false)
     .description('Crea un nuevo proyecto')
-    .action(async (name: string | undefined, options: { auth?: boolean, grpc?: boolean }) => {
+    .action(async (name: string | undefined) => {
       try {
         if (!name) {
-          const answers = await inquirer.prompt([
+          const nameAnswer = await inquirer.prompt([
             { type: 'input', name: 'name', message: '¿Qué nombre tendrá el proyecto?' },
           ])
-          name = answers.name
+          name = nameAnswer.name
         }
 
-        let template = Template.REST
-        if (options.auth) template = Template.AUTH
-        else if (options.grpc) template = Template.GRPC
+        const templateAnswers = await inquirer.prompt([
+          {
+            type: 'list',
+            name: 'template',
+            message: '¿Qué plantilla deseas utilizar?',
+            choices: [
+              { name: 'Rest API sin autenticación', value: Template.REST },
+              { name: 'Rest API con autenticación mediante JWT', value: Template.AUTH },
+              { name: 'GRPC Server', value: Template.GRPC }
+            ]
+          }
+        ])
+        const template = templateAnswers.template
 
         const projectName = name || 'project'
 

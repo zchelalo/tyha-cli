@@ -12,8 +12,8 @@ interface NameAnswer {
   name: string
 }
 
-interface TemplateAnswers {
-  template: Template
+interface ProjectTypeAnswers {
+  projectType: Template.REST | Template.GRPC
 }
 
 export function createProject() {
@@ -29,23 +29,31 @@ export function createProject() {
           name = nameAnswer.name
         }
 
-        const templateAnswers = await inquirer.prompt<TemplateAnswers>([
+        const projectTypeAnswers = await inquirer.prompt<ProjectTypeAnswers>([
           {
             type: 'list',
-            name: 'template',
-            message: '¿Qué plantilla deseas utilizar?',
+            name: 'projectType',
+            message: '¿Qué tipo de proyecto vas a crear?',
             choices: [
-              { name: 'Rest API sin autenticación', value: Template.REST },
-              { name: 'Rest API con autenticación mediante JWT', value: Template.AUTH },
+              { name: 'Rest Server', value: Template.REST },
               { name: 'GRPC Server', value: Template.GRPC }
             ]
           }
         ])
-        const template = templateAnswers.template
+        const projectType = projectTypeAnswers.projectType
+        let template: Template = projectType
+
+        if (projectType === Template.REST) {
+          const authAnswers = await inquirer.prompt([
+            { type: 'confirm', name: 'auth', message: '¿Desea añadir autenticación?' },
+          ])
+          const auth = authAnswers.auth
+          if (auth) template = Template.AUTH
+        }
 
         const projectPath = Strings.clean(name)
 
-        console.log(chalk.green(`Creando proyecto "${Strings.fistLetterToUpperCase(name)}" con plantilla ${Strings.fistLetterToUpperCase(template)}...`))
+        console.log(chalk.green(`Creando proyecto "${Strings.fistLetterToUpperCase(name)}"...`))
         await Files.copyDirectory(join(TEMPLATES, TEMPLATE_ROUTES[template]), projectPath)
 
         await Files.replaceInFile(join(projectPath, 'package.json'), '{{name}}', projectPath)

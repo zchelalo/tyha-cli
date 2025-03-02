@@ -16,23 +16,6 @@ export enum cookieNames {
 }
 
 /**
- * Constants for the cronjob status values.
- * 
- * @enum
-*/
-export enum cronjobStatus {
-  /**
-   * The status of a successful cronjob run.
-  */
-  SUCCESS = 'success',
-
-  /**
-   * The status of a failed cronjob run.
-  */
-  ERROR = 'error'
-}
-
-/**
  * Constants for the user roles.
  * 
  * @enum

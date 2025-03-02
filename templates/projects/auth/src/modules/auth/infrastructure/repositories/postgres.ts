@@ -2,7 +2,7 @@ import { AuthRepository } from 'src/modules/auth/domain/repository.js'
 import { RoleValue, TokenTypeValue, TokenValue } from 'src/modules/auth/domain/value.js'
 
 import { db } from 'src/data/drizzle/config/orm.js'
-import { role, token, tokenType } from 'src/data/drizzle/schemas.js'
+import { role, token, tokenType } from 'src/data/drizzle/schemas/index.js'
 import { eq, and } from 'drizzle-orm'
 
 import { NotFoundError } from 'src/helpers/errors/custom_error.js'

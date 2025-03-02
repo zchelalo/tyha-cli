@@ -1,0 +1,43 @@
+services:
+
+  {{name}}_app:
+    container_name: {{name}}_app
+    restart: unless-stopped
+    env_file: ../.env
+    build:
+      context: ../
+      dockerfile: ./.dockers/Dockerfile
+    ports:
+      - 8000:8000
+    volumes:
+      - ../src:/app/src
+      - ../logs:/app/logs
+
+  {{name}}_db:
+    image: postgres:15.2
+    container_name: {{name}}_db
+    environment:
+      POSTGRES_PASSWORD: example
+      POSTGRES_DB: {{name}}
+      TZ: America/Hermosillo
+    volumes:
+      - ../DB/postgresql:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  {{name}}_adminer:
+    image: adminer
+    container_name: {{name}}_adminer
+    environment:
+      TZ: America/Hermosillo
+      ADMINER_DESIGN: "ng9"
+    ports:
+      - 8080:8080
+    depends_on:
+      {{name}}_db:
+        condition: service_started

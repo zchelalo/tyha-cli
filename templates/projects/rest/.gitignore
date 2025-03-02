@@ -1,0 +1,11 @@
+node_modules
+DB
+.env
+dist
+docs
+logs
+coverage
+src/data/drizzle/migrations/*
+!src/data/drizzle/migrations/.gitkeep
+certs/*
+!certs/.gitkeep

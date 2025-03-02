@@ -2,11 +2,9 @@ import { UserEntity } from 'src/modules/user/domain/entity.js'
 import { UserRepository } from 'src/modules/user/domain/repository.js'
 
 import { db } from 'src/data/drizzle/config/orm.js'
-import { role, user } from 'src/data/drizzle/schemas/index.js'
+import { user } from 'src/data/drizzle/schemas/index.js'
 import { count, desc, eq } from 'drizzle-orm'
 import { ConflictError, NotFoundError } from 'src/helpers/errors/custom_error.js'
-
-import { userRoles } from 'src/config/constants.js'
 
 /**
  * PostgresRepository class.
@@ -29,21 +27,16 @@ export class PostgresRepository implements UserRepository {
         id: user.id,
         name: user.name,
         email: user.email,
-        password: user.password,
-        role: role.key
+        password: user.password
       })
       .from(user)
-      .innerJoin(role, eq(user.roleId, role.id))
       .where(eq(user.id, id))
       .limit(1)
 
     if (userObtained.length === 0) {
       throw new NotFoundError(`user with id '${id}'`)
     }
-    return {
-      ...userObtained[0],
-      role: userObtained[0].role as userRoles
-    }
+    return userObtained[0]
   }
 
   /**
@@ -59,21 +52,16 @@ export class PostgresRepository implements UserRepository {
         id: user.id,
         name: user.name,
         email: user.email,
-        password: user.password,
-        role: role.key
+        password: user.password
       })
       .from(user)
-      .innerJoin(role, eq(user.roleId, role.id))
       .where(eq(user.email, email))
       .limit(1)
 
     if (userObtained.length === 0) {
       throw new NotFoundError(`user with email '${email}'`)
     }
-    return {
-      ...userObtained[0],
-      role: userObtained[0].role as userRoles
-    }
+    return userObtained[0]
   }
 
   /**
@@ -90,11 +78,9 @@ export class PostgresRepository implements UserRepository {
         id: user.id,
         name: user.name,
         email: user.email,
-        password: user.password,
-        role: role.key
+        password: user.password
       })
       .from(user)
-      .innerJoin(role, eq(user.roleId, role.id))
       .offset(offset)
       .limit(limit)
       .orderBy(desc(user.createdAt))
@@ -102,10 +88,7 @@ export class PostgresRepository implements UserRepository {
     if (usersObtained.length === 0) {
       throw new NotFoundError('users')
     }
-    return usersObtained.map(user => ({
-      ...user,
-      role: user.role as userRoles
-    }))
+    return usersObtained
 
   }
 
@@ -120,7 +103,6 @@ export class PostgresRepository implements UserRepository {
         count: count()
       })
       .from(user)
-      .innerJoin(role, eq(user.roleId, role.id))
 
     return usersCount[0].count
   }
@@ -146,24 +128,9 @@ export class PostgresRepository implements UserRepository {
       throw new ConflictError(`email already exists`)
     }
 
-    const roleObtained = await db
-      .select({
-        id: role.id
-      })
-      .from(role)
-      .where(eq(role.key, userData.role))
-      .limit(1)
-
-    if (roleObtained.length === 0) {
-      throw new NotFoundError('role')
-    }
-
     const userCreated = await db
       .insert(user)
-      .values({
-        ...userData,
-        roleId: roleObtained[0].id
-      })
+      .values(userData)
       .returning({
         id: user.id,
         name: user.name,
@@ -171,9 +138,6 @@ export class PostgresRepository implements UserRepository {
         password: user.password
       })
 
-    return {
-      ...userCreated[0],
-      role: userData.role
-    }
+    return userCreated[0]
   }
 }

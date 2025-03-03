@@ -8,14 +8,31 @@ import { MODULE_ROUTES, ModuleType, TEMPLATES } from 'src/config/constants.js'
 import { Files } from 'src/utils/files.js'
 import { Strings } from 'src/utils/strings.js'
 
+/**
+ * Interface for the module name answer
+ */
 interface ModuleAnswer {
+  /**
+   * Module name
+   */
   name: string
 }
 
+/**
+ * Interface for the module type answer
+ */
 interface ModuleTypeAnswers {
+  /**
+   * Module type
+   */
   moduleType: ModuleType
 }
 
+/**
+ * Create a module command
+ * 
+ * @returns The command
+ */
 export function createModule() {
   return new Command('create:module')
     .argument('[name]', 'Nombre del módulo')

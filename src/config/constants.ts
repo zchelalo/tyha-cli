@@ -24,3 +24,14 @@ export const MODULE_ROUTES: Record<ModuleType, string> = {
   [ModuleType.FULL]: 'modules/full',
   [ModuleType.ONLY_DOMAIN]: 'modules/only_domain',
 }
+
+export enum RouterType {
+  REST = 'rest',
+  GRPC = 'grpc',
+}
+
+export enum RepositoryType {
+  IN_MEMORY = 'in_memory',
+  DRIZZLE = 'drizzle',
+  GRPC_CLIENT = 'grpc_client',
+}

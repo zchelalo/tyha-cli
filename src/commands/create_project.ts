@@ -35,8 +35,8 @@ export function createProject() {
             name: 'projectType',
             message: '¿Qué tipo de proyecto vas a crear?',
             choices: [
-              { name: 'Rest Server', value: Template.REST },
-              { name: 'GRPC Server', value: Template.GRPC }
+              { name: 'REST Server', value: Template.REST },
+              { name: 'gRPC Server', value: Template.GRPC }
             ]
           }
         ])

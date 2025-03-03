@@ -3,7 +3,7 @@ import chalk from 'chalk'
 import inquirer from 'inquirer'
 import { join } from 'path'
 
-import { MODULE_ROUTES, ModuleType, TEMPLATES } from 'src/config/constants.js'
+import { MODULE_ROUTES, ModuleType, RepositoryType, RouterType, Template, TEMPLATES } from 'src/config/constants.js'
 
 import { Files } from 'src/utils/files.js'
 import { Strings } from 'src/utils/strings.js'
@@ -26,6 +26,26 @@ interface ModuleTypeAnswers {
    * Module type
    */
   moduleType: ModuleType
+}
+
+/**
+ * Interface for the router type answer
+ */
+interface RouterTypeAnswers {
+  /**
+   * Router type
+   */
+  routerType: RouterType
+}
+
+/**
+ * Interface for the repository type answer
+ */
+interface RepositoryTypeAnswers {
+  /**
+   * Repository type
+   */
+  repositoryType: RepositoryType
 }
 
 /**
@@ -116,6 +136,104 @@ export function createModule() {
         await Files.replaceInFile(join(modulePath, 'application/use_cases/use_cases.ts'), '{{nameCamel}}', nameCamel)
 
         await Files.renameFile(join(modulePath, 'application/use_cases/use_cases.ts'), join(modulePath, `application/use_cases/${nameClean}.ts`))
+
+        if (moduleType === ModuleType.FULL) {
+          const routerTypeAnswer = await inquirer.prompt<RouterTypeAnswers>([
+            {
+              type: 'list',
+              name: 'routerType',
+              message: '¿Qué tipo de router quieres crear?',
+              choices: [
+                { name: 'REST Router', value: RouterType.REST },
+                { name: 'gRPC Router', value: RouterType.GRPC }
+              ]
+            }
+          ])
+          const routerType = routerTypeAnswer.routerType
+
+          switch (routerType) {
+            case RouterType.REST:
+              await Files.replaceInFile(join(modulePath, 'infrastructure/rest.ts'), '{{name}}', nameEntity)
+              await Files.replaceInFile(join(modulePath, 'infrastructure/rest.ts'), '{{nameClean}}', nameClean)
+              await Files.replaceInFile(join(modulePath, 'infrastructure/rest.ts'), '{{nameCamel}}', nameCamel)
+
+              await Files.replaceInFile(join(modulePath, 'infrastructure/rest_controller.ts'), '{{nameCamel}}', nameCamel)
+              await Files.replaceInFile(join(modulePath, 'infrastructure/rest_controller.ts'), '{{nameCamel}}', nameCamel)
+              await Files.replaceInFile(join(modulePath, 'infrastructure/rest_controller.ts'), '{{nameCamel}}', nameCamel)
+
+              await Files.renameFile(join(modulePath, 'infrastructure/rest_controller.ts'), join(modulePath, 'infrastructure/controller.ts'))
+
+              await Files.deleteFile(join(modulePath, 'infrastructure/grpc.ts'))
+              await Files.deleteFile(join(modulePath, 'infrastructure/grpc_controller.ts'))
+              break;
+            case RouterType.REST:
+              await Files.replaceInFile(join(modulePath, 'infrastructure/grpc.ts'), '{{name}}', nameEntity)
+              await Files.replaceInFile(join(modulePath, 'infrastructure/grpc.ts'), '{{nameClean}}', nameClean)
+              await Files.replaceInFile(join(modulePath, 'infrastructure/grpc.ts'), '{{nameCamel}}', nameCamel)
+
+              await Files.replaceInFile(join(modulePath, 'infrastructure/grpc_controller.ts'), '{{nameCamel}}', nameCamel)
+              await Files.replaceInFile(join(modulePath, 'infrastructure/grpc_controller.ts'), '{{nameCamel}}', nameCamel)
+              await Files.replaceInFile(join(modulePath, 'infrastructure/grpc_controller.ts'), '{{nameCamel}}', nameCamel)
+
+              await Files.renameFile(join(modulePath, 'infrastructure/grpc_controller.ts'), join(modulePath, 'infrastructure/controller.ts'))
+
+              await Files.deleteFile(join(modulePath, 'infrastructure/rest.ts'))
+              await Files.deleteFile(join(modulePath, 'infrastructure/rest_controller.ts'))
+              break;
+            default:
+              await Files.deleteFile(join(modulePath, 'infrastructure/grpc.ts'))
+              await Files.deleteFile(join(modulePath, 'infrastructure/grpc_controller.ts'))
+              await Files.deleteFile(join(modulePath, 'infrastructure/rest.ts'))
+              await Files.deleteFile(join(modulePath, 'infrastructure/rest_controller.ts'))
+              break;
+          }
+
+          const repositoryTypeAnswer = await inquirer.prompt<RepositoryTypeAnswers>([
+            {
+              type: 'list',
+              name: 'repositoryType',
+              message: '¿Qué tipo de router quieres crear?',
+              choices: [
+                { name: 'Drizzle ORM', value: RepositoryType.DRIZZLE },
+                { name: 'In memory', value: RepositoryType.IN_MEMORY },
+                { name: 'gRPC Client', value: RepositoryType.GRPC_CLIENT }
+              ]
+            }
+          ])
+          const repositoryType = repositoryTypeAnswer.repositoryType
+
+          switch (repositoryType) {
+            case RepositoryType.DRIZZLE:
+              await Files.replaceInFile(join(modulePath, 'infrastructure/repositories/drizzle.ts'), '{{name}}', nameEntity)
+              await Files.replaceInFile(join(modulePath, 'infrastructure/repositories/drizzle.ts'), '{{nameClean}}', nameClean)
+              await Files.replaceInFile(join(modulePath, 'infrastructure/repositories/drizzle.ts'), '{{nameCamel}}', nameCamel)
+
+              await Files.deleteFile(join(modulePath, 'infrastructure/repositories/grpc.ts'))
+              await Files.deleteFile(join(modulePath, 'infrastructure/repositories/memory.ts'))
+              break;
+            case RepositoryType.IN_MEMORY:
+              await Files.replaceInFile(join(modulePath, 'infrastructure/repositories/memory.ts'), '{{name}}', nameEntity)
+              await Files.replaceInFile(join(modulePath, 'infrastructure/repositories/memory.ts'), '{{nameClean}}', nameClean)
+              await Files.replaceInFile(join(modulePath, 'infrastructure/repositories/memory.ts'), '{{nameCamel}}', nameCamel)
+
+              await Files.deleteFile(join(modulePath, 'infrastructure/repositories/grpc.ts'))
+              await Files.deleteFile(join(modulePath, 'infrastructure/repositories/drizzle.ts'))
+              break;
+            case RepositoryType.GRPC_CLIENT:
+              await Files.replaceInFile(join(modulePath, 'infrastructure/repositories/grpc.ts'), '{{name}}', nameEntity)
+              await Files.replaceInFile(join(modulePath, 'infrastructure/repositories/grpc.ts'), '{{nameClean}}', nameClean)
+              await Files.replaceInFile(join(modulePath, 'infrastructure/repositories/grpc.ts'), '{{nameCamel}}', nameCamel)
+
+              await Files.deleteFile(join(modulePath, 'infrastructure/repositories/drizzle.ts'))
+              await Files.deleteFile(join(modulePath, 'infrastructure/repositories/memory.ts'))
+              break;
+            default:
+              await Files.deleteFile(join(modulePath, 'infrastructure/repositories/memory.ts'))
+              await Files.deleteFile(join(modulePath, 'infrastructure/repositories/drizzle.ts'))
+              await Files.deleteFile(join(modulePath, 'infrastructure/repositories/grpc.ts'))
+              break;
+          }
+        }
 
         console.log(chalk.blue('Proyecto creado exitosamente'))
       } catch (error: unknown) {

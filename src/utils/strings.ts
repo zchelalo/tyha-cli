@@ -4,7 +4,11 @@ export class Strings {
   }
 
   static camelCase(str: string): string {
-    return str.replace(/-([a-z])/g, (g) => g[1].toUpperCase())
+    return str.replace(/[-_]([a-z])/g, (_, g1) => g1.toUpperCase())
+  }
+
+  static pascalCase(str: string): string {
+    return str.replace(/(\w)(\w*)/g, (_, g1, g2) => `${g1.toUpperCase()}${g2.toLowerCase()}`)
   }
 
   static clean(str: string): string {

@@ -156,6 +156,21 @@ export class Files {
       throw new Error('Error al reemplazar en el archivo')
     }
   }
+
+  static async renameFile(oldPath: string, newPath: string): Promise<void> {
+    try {
+      await fs.rename(oldPath, newPath)
+    } catch (error) {
+      if (isError(error) && error.code === 'ENOENT') throw new Error(`El archivo en la ruta ${oldPath} no existe`)
+      if (isError(error) && error.code === 'EACCES') throw new Error(`No tienes permisos para renombrar el archivo en la ruta ${oldPath}`)
+      if (isError(error) && error.code === 'EISDIR') throw new Error(`La ruta ${oldPath} es un directorio`)
+      if (isError(error) && error.code === 'EPERM') throw new Error(`No tienes permisos para renombrar el archivo en la ruta ${oldPath}`)
+
+      if (error instanceof Error) throw new Error(`Error al renombrar el archivo en la ruta ${oldPath}: ${error.message}`)
+
+      throw new Error('Error al renombrar el archivo')
+    }
+  }
 }
 
 function escapeRegExp(text: string): string {

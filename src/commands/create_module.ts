@@ -47,17 +47,58 @@ export function createModule() {
           return
         }
 
-        const modulePath = join('src/modules', Strings.clean(name))
+        const nameClean = Strings.clean(name)
+        const nameCamel = Strings.camelCase(nameClean)
+        const nameEntity = Strings.pascalCase(Strings.camelCase(Strings.clean(name)))
+        const modulePath = join('src/modules', nameClean)
 
         if (await Files.directoryExists(modulePath)) {
-          console.error(chalk.red(`Error: El módulo "${name}" ya existe.`))
+          console.error(chalk.red(`Error: El módulo "${nameEntity}" ya existe.`))
           return
         }
 
-        console.log(chalk.green(`Creando módulo "${name}" de tipo ${Strings.fistLetterToUpperCase(moduleType)}...`))
+        console.log(chalk.green(`Creando módulo "${nameEntity}" de tipo ${Strings.fistLetterToUpperCase(moduleType)}...`))
         await Files.copyDirectory(join(TEMPLATES, MODULE_ROUTES[moduleType]), modulePath)
 
-        // await Files.replaceInFile(join(modulePath, 'package.json'), '{{name}}', Strings.clean(name))
+        // Replace placeholders in domain layer files
+        // entity
+        await Files.replaceInFile(join(modulePath, 'domain/entity.ts'), '{{name}}', nameEntity)
+        await Files.replaceInFile(join(modulePath, 'domain/entity.ts'), '{{nameCamel}}', nameCamel)
+
+        // repository
+        await Files.replaceInFile(join(modulePath, 'domain/repository.ts'), '{{name}}', nameEntity)
+        await Files.replaceInFile(join(modulePath, 'domain/repository.ts'), '{{nameClean}}', nameClean)
+        await Files.replaceInFile(join(modulePath, 'domain/repository.ts'), '{{nameCamel}}', nameCamel)
+
+        // value
+        await Files.replaceInFile(join(modulePath, 'domain/value.ts'), '{{name}}', nameEntity)
+        await Files.replaceInFile(join(modulePath, 'domain/value.ts'), '{{nameClean}}', nameClean)
+        await Files.replaceInFile(join(modulePath, 'domain/value.ts'), '{{nameCamel}}', nameCamel)
+
+        // Replace placeholders in application layer files
+        // dtos
+        await Files.replaceInFile(join(modulePath, 'application/dtos/create.ts'), '{{name}}', nameEntity)
+        await Files.replaceInFile(join(modulePath, 'application/dtos/create.ts'), '{{nameClean}}', nameClean)
+        await Files.replaceInFile(join(modulePath, 'application/dtos/create.ts'), '{{nameCamel}}', nameCamel)
+        await Files.replaceInFile(join(modulePath, 'application/dtos/response.ts'), '{{name}}', nameEntity)
+        await Files.replaceInFile(join(modulePath, 'application/dtos/response.ts'), '{{nameClean}}', nameClean)
+        await Files.replaceInFile(join(modulePath, 'application/dtos/response.ts'), '{{nameCamel}}', nameCamel)
+
+        await Files.renameFile(join(modulePath, 'application/dtos/create.ts'), join(modulePath, `application/dtos/${nameClean}_create.ts`))
+        await Files.renameFile(join(modulePath, 'application/dtos/response.ts'), join(modulePath, `application/dtos/${nameClean}_response.ts`))
+
+        // schemas
+        await Files.replaceInFile(join(modulePath, 'application/schemas/schema.ts'), '{{name}}', nameEntity)
+        await Files.replaceInFile(join(modulePath, 'application/schemas/schema.ts'), '{{nameCamel}}', nameCamel)
+
+        await Files.renameFile(join(modulePath, 'application/schemas/schema.ts'), join(modulePath, `application/schemas/${nameClean}.ts`))
+
+        // use cases
+        await Files.replaceInFile(join(modulePath, 'application/use_cases/use_cases.ts'), '{{name}}', nameEntity)
+        await Files.replaceInFile(join(modulePath, 'application/use_cases/use_cases.ts'), '{{nameClean}}', nameClean)
+        await Files.replaceInFile(join(modulePath, 'application/use_cases/use_cases.ts'), '{{nameCamel}}', nameCamel)
+
+        await Files.renameFile(join(modulePath, 'application/use_cases/use_cases.ts'), join(modulePath, `application/use_cases/${nameClean}.ts`))
 
         console.log(chalk.blue('Proyecto creado exitosamente'))
       } catch (error: unknown) {

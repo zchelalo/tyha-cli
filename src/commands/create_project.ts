@@ -16,8 +16,9 @@ interface ProjectTypeAnswers {
   projectType: Template.REST | Template.GRPC
 }
 
-export function createProject() {
-  return new Command('create:project')
+export class CreateProject {
+  public static command(): Command {
+    return new Command('create:project')
     .argument('[name]', 'Nombre del proyecto')
     .description('Crea un nuevo proyecto')
     .action(async (name: string | undefined) => {
@@ -71,4 +72,5 @@ export function createProject() {
         console.error(chalk.red('Ha ocurrido un error inesperado.'))
       }
     })
+  }
 }

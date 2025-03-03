@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 import { Command } from 'commander'
 
-import { createProject } from 'src/commands/create_project.js'
-import { createModule } from 'src/commands/create_module.js'
+import { CreateProject } from 'src/commands/create_project.js'
+import { CreateModule } from 'src/commands/create_module.js'
 
 const program = new Command()
 
@@ -14,7 +14,7 @@ program
 /**
  * Comandos de la aplicación
  */
-program.addCommand(createProject())
-program.addCommand(createModule())
+program.addCommand(CreateProject.command())
+program.addCommand(CreateModule.command())
 
 program.parse(process.argv)

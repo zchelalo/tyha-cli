@@ -11,6 +11,6 @@ export class DTO{{name}}Create {
    * 
    * @param {{{name}}Value} {{nameCamel}} - The {{nameCamel}} value object from the domain layer.
   */
-  constructor({{name}}Value) {
+  constructor({{nameCamel}}: {{name}}Value) {
   }
 }

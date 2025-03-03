@@ -7,8 +7,6 @@ import {
   paginationSchema
 } from 'src/modules/{{nameClean}}/application/schemas/{{nameClean}}.js'
 
-import bcrypt from 'bcrypt'
-
 /**
  * Create a new {{name}} Use Case.
  * Provides methods to interact with {{nameCamel}} data including retrieving, creating, and counting {{nameCamel}} objects.
@@ -99,7 +97,7 @@ export class {{name}}UseCase {
    * ```
   */
   public async count(): Promise<number> {
-    return this.userRepository.count()
+    return this.{{nameCamel}}Repository.count()
   }
 
   /**

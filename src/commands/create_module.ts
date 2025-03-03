@@ -49,7 +49,7 @@ export function createModule() {
 
         const nameClean = Strings.clean(name)
         const nameCamel = Strings.camelCase(nameClean)
-        const nameEntity = Strings.pascalCase(Strings.camelCase(Strings.clean(name)))
+        const nameEntity = Strings.pascalCase(nameCamel)
         const modulePath = join('src/modules', nameClean)
 
         if (await Files.directoryExists(modulePath)) {

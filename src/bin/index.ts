@@ -9,7 +9,7 @@ const program = new Command()
 program
   .name('tyha')
   .version('1.0.0')
-  .description('CLI para manejar proyectos con typescript y hexagonal architecture')
+  .description('CLI for manage projects in TypeScript with Hexagonal Architecture')
 
 /**
  * Comandos de la aplicación

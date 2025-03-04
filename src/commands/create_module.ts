@@ -272,6 +272,7 @@ export class CreateModule {
         await Files.replaceInFile(restControllerPath, '{{nameCamel}}', CreateModule.nameCamel)
         await Files.replaceInFile(restControllerPath, '{{nameCamel}}', CreateModule.nameCamel)
         await Files.replaceInFile(restControllerPath, '{{nameCamel}}', CreateModule.nameCamel)
+        await Files.replaceInFile(restControllerPath, '{{nameKebab}}', CreateModule.nameKebab)
 
         await Files.renameFile(restRouterPath, join(CreateModule.modulePath, 'infrastructure/router.ts'))
         await Files.renameFile(restControllerPath, join(CreateModule.modulePath, 'infrastructure/controller.ts'))
@@ -290,6 +291,7 @@ export class CreateModule {
         await Files.replaceInFile(grpcControllerPath, '{{nameCamel}}', CreateModule.nameCamel)
         await Files.replaceInFile(grpcControllerPath, '{{nameCamel}}', CreateModule.nameCamel)
         await Files.replaceInFile(grpcControllerPath, '{{nameCamel}}', CreateModule.nameCamel)
+        await Files.replaceInFile(grpcControllerPath, '{{nameKebab}}', CreateModule.nameKebab)
 
         await Files.renameFile(grpcRouterPath, join(CreateModule.modulePath, 'infrastructure/router.ts'))
         await Files.renameFile(grpcControllerPath, join(CreateModule.modulePath, 'infrastructure/controller.ts'))

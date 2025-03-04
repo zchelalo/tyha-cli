@@ -8,11 +8,8 @@ import { Template, TEMPLATE_ROUTES, TEMPLATES } from 'src/config/constants.js'
 import { Files } from 'src/utils/files.js'
 import { Strings } from 'src/utils/strings.js'
 
-interface NameAnswer {
+interface Answers {
   name: string
-}
-
-interface ProjectTypeAnswers {
   projectType: Template.REST | Template.GRPC
 }
 
@@ -24,13 +21,13 @@ export class CreateProject {
     .action(async (name: string | undefined) => {
       try {
         if (!name) {
-          const nameAnswer = await inquirer.prompt<NameAnswer>([
+          const nameAnswer = await inquirer.prompt<Answers>([
             { type: 'input', name: 'name', message: '¿Qué nombre tendrá el proyecto?' },
           ])
           name = nameAnswer.name
         }
 
-        const projectTypeAnswers = await inquirer.prompt<ProjectTypeAnswers>([
+        const { projectType } = await inquirer.prompt<Answers>([
           {
             type: 'list',
             name: 'projectType',
@@ -41,14 +38,12 @@ export class CreateProject {
             ]
           }
         ])
-        const projectType = projectTypeAnswers.projectType
         let template: Template = projectType
 
-        if (projectType === Template.REST) {
-          const authAnswers = await inquirer.prompt([
+        if (template === Template.REST) {
+          const { auth } = await inquirer.prompt([
             { type: 'confirm', name: 'auth', message: '¿Desea añadir autenticación?' },
           ])
-          const auth = authAnswers.auth
           if (auth) template = Template.AUTH
         }
 

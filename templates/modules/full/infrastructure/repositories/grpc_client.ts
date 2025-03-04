@@ -7,7 +7,7 @@ import {
   Get{{name}}Response
 } from 'src/proto/{{nameClean}}.js'
 
-import { NotFoundError, InternalServerError } from 'src/helpers/errors/custom_error.js'
+import { NotFoundError } from 'src/helpers/errors/custom_error.js'
 
 import { logger } from 'src/helpers/logger.js'
 import { grpcCodeToError } from 'src/helpers/errors/handler.js'
@@ -73,7 +73,7 @@ export class {{repositoryName}}Repository implements {{name}}Repository {
     })
 
     if (!response.{{nameCamel}}) {
-      const errorToThrow = new InternalServerError('no se ha podido obtener el {{nameCamel}}')
+      const errorToThrow = new NotFoundError('{{nameCamel}}')
       logger.error(errorToThrow.message)
       throw errorToThrow
     }

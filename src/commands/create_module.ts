@@ -111,7 +111,7 @@ export class CreateModule {
             return
           }
 
-          console.log(chalk.green(`Creando módulo "${CreateModule.nameEntity}" de tipo ${Strings.fistLetterToUpperCase(moduleType)}...`))
+          console.log(chalk.green(`Creando módulo "${CreateModule.nameEntity}" de tipo ${Strings.firstLetterToUpperCase(moduleType)}...`))
           await Files.copyDirectory(join(TEMPLATES, MODULE_ROUTES[moduleType]), CreateModule.modulePath)
 
           await CreateModule.modifyDomainFiles()
@@ -173,14 +173,13 @@ export class CreateModule {
       }
     ])
 
-    const repositoryClean = Strings.clean(repositoryType)
-    CreateModule.repositoryName = Strings.pascalCase(Strings.camelCase(repositoryClean))
-    CreateModule.repositoryClean = repositoryClean
+    CreateModule.repositoryName = Strings.pascalCase(repositoryType)
+    CreateModule.repositoryClean = Strings.clean(repositoryType)
 
     const infraFiles: Record<string, string[]> = {
       [RepositoryType.DRIZZLE]: ['infrastructure/repositories/drizzle.ts'],
       [RepositoryType.IN_MEMORY]: ['infrastructure/repositories/memory.ts'],
-      [RepositoryType.GRPC_CLIENT]: ['infrastructure/repositories/grpc.ts'],
+      [RepositoryType.GRPC_CLIENT]: ['infrastructure/repositories/grpc_client.ts'],
       [RouterType.REST]: ['infrastructure/rest.ts', 'infrastructure/rest_controller.ts'],
       [RouterType.GRPC]: ['infrastructure/grpc.ts', 'infrastructure/grpc_controller.ts']
     }
@@ -244,7 +243,7 @@ export class CreateModule {
     CreateModule.nameClean = clean
     CreateModule.nameCamel = Strings.camelCase(clean)
     CreateModule.nameKebab = Strings.kebabCase(CreateModule.nameCamel)
-    CreateModule.nameEntity = Strings.pascalCase(CreateModule.nameCamel)
+    CreateModule.nameEntity = Strings.pascalCase(clean)
     CreateModule.modulePath = join('src/modules', clean)
   }
 

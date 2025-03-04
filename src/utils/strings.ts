@@ -7,26 +7,30 @@ export class Strings {
    * @param str - String to capitalize
    * @returns Capitalized string
    */
-  static fistLetterToUpperCase(str: string): string {
+  static firstLetterToUpperCase(str: string): string {
     return `${str.charAt(0).toUpperCase()}${str.slice(1)}`
   }
 
   /**
    * Convert a string to camelCase
-   * @param str - String to convert, may contain dashes or underscores
+   * @param str - String to convert, may contain spaces, dashes, or underscores
    * @returns camelCase string
    */
   static camelCase(str: string): string {
-    return str.replace(/[-_]([a-z])/g, (_, g1) => g1.toUpperCase())
+    return str
+      .replace(/[-_\s]+(.)?/g, (_, g1) => (g1 ? g1.toUpperCase() : ''))
+      .replace(/^([A-Z])/, g1 => g1.toLowerCase())
   }
 
   /**
    * Convert a string to PascalCase
-   * @param str - String to convert, may contain spaces
+   * @param str - String to convert, may contain spaces, dashes, or underscores
    * @returns PascalCase string
    */
   static pascalCase(str: string): string {
-    return str.replace(/(\w)(\w*)/g, (_, g1, g2) => `${g1.toUpperCase()}${g2.toLowerCase()}`)
+    return str
+      .replace(/[-_\s]+(.)?/g, (_, g1) => (g1 ? g1.toUpperCase() : ''))
+      .replace(/(^\w)/, g1 => g1.toUpperCase())
   }
 
   /**
@@ -35,7 +39,10 @@ export class Strings {
    * @returns kebab-case string
    */
   static kebabCase(str: string): string {
-    return str.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()
+    return str
+      .replace(/([a-z])([A-Z])/g, '$1-$2')
+      .replace(/[\s_]+/g, '-')
+      .toLowerCase()
   }
 
   /**
@@ -44,8 +51,7 @@ export class Strings {
    * @returns Normalized string
    */
   static snakeToNormal(str: string): string {
-    const formatted = str.replace(/_/g, ' ')
-    return this.fistLetterToUpperCase(formatted)
+    return Strings.firstLetterToUpperCase(str.replace(/_/g, ' '))
   }
 
   /**
@@ -54,8 +60,10 @@ export class Strings {
    * @returns Cleaned string
    */
   static clean(str: string): string {
-    const noSpaces = str.trim().replace(/\s/g, '_')
-    const cleaned = noSpaces.replace(/[^a-zA-Z0-9_]/g, '')
-    return cleaned.toLowerCase()
+    return str
+      .trim()
+      .replace(/\s+/g, '_')
+      .replace(/[^a-zA-Z0-9_]/g, '')
+      .toLowerCase()
   }
 }

@@ -49,13 +49,13 @@ export class CreateProject {
 
         const projectPath = Strings.clean(name)
 
-        console.log(chalk.green(`Creando proyecto "${Strings.fistLetterToUpperCase(name)}"...`))
+        console.log(chalk.green(`Creando proyecto "${Strings.firstLetterToUpperCase(name)}"...`))
         await Files.copyDirectory(join(TEMPLATES, TEMPLATE_ROUTES[template]), projectPath)
 
         await Files.replaceInFile(join(projectPath, 'package.json'), '{{name}}', projectPath)
         await Files.replaceInFile(join(projectPath, '.env.example'), '{{name}}', projectPath)
         await Files.replaceInFile(join(projectPath, '.env.test'), '{{name}}', projectPath)
-        await Files.replaceInFile(join(projectPath, 'README.md'), '{{name}}', Strings.fistLetterToUpperCase(name))
+        await Files.replaceInFile(join(projectPath, 'README.md'), '{{name}}', Strings.firstLetterToUpperCase(name))
         await Files.replaceInFile(join(projectPath, '.dockers/compose.yml'), '{{name}}', projectPath)
 
         console.log(chalk.blue('Proyecto creado exitosamente'))

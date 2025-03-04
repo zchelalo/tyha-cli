@@ -53,6 +53,8 @@ export class CreateModule {
   private static nameEntity: string
   private static nameClean: string
   private static nameCamel: string
+  private static nameKebab: string
+  private static repositoryName: string
   private static repositoryClean: string
 
   /**
@@ -93,6 +95,7 @@ export class CreateModule {
 
           CreateModule.nameClean = Strings.clean(name)
           CreateModule.nameCamel = Strings.camelCase(CreateModule.nameClean)
+          CreateModule.nameKebab = Strings.kebabCase(CreateModule.nameCamel)
           CreateModule.nameEntity = Strings.pascalCase(CreateModule.nameCamel)
           CreateModule.modulePath = join('src/modules', CreateModule.nameClean)
 
@@ -205,8 +208,9 @@ export class CreateModule {
         await Files.deleteFile(grpcRepositoryPath)
         await Files.deleteFile(memoryRepositoryPath)
 
-        CreateModule.repositoryClean = 'drizzle'
-        break;
+        CreateModule.repositoryName = Strings.pascalCase(Strings.camelCase(Strings.clean('drizzle')))
+        CreateModule.repositoryClean = Strings.clean('drizzle')
+        break
       case RepositoryType.IN_MEMORY:
         await Files.replaceInFile(memoryRepositoryPath, '{{name}}', CreateModule.nameEntity)
         await Files.replaceInFile(memoryRepositoryPath, '{{nameClean}}', CreateModule.nameClean)
@@ -215,8 +219,9 @@ export class CreateModule {
         await Files.deleteFile(grpcRepositoryPath)
         await Files.deleteFile(drizzleRepositoryPath)
 
-        CreateModule.repositoryClean = 'memory'
-        break;
+        CreateModule.repositoryName = Strings.pascalCase(Strings.camelCase(Strings.clean('memory')))
+        CreateModule.repositoryClean = Strings.clean('memory')
+        break
       case RepositoryType.GRPC_CLIENT:
         await Files.replaceInFile(grpcRepositoryPath, '{{name}}', CreateModule.nameEntity)
         await Files.replaceInFile(grpcRepositoryPath, '{{nameClean}}', CreateModule.nameClean)
@@ -225,13 +230,14 @@ export class CreateModule {
         await Files.deleteFile(drizzleRepositoryPath)
         await Files.deleteFile(memoryRepositoryPath)
 
-        CreateModule.repositoryClean = 'grpc'
-        break;
+        CreateModule.repositoryName = Strings.pascalCase(Strings.camelCase(Strings.clean('grpc')))
+        CreateModule.repositoryClean = Strings.clean('grpc')
+        break
       default:
         await Files.deleteFile(memoryRepositoryPath)
         await Files.deleteFile(drizzleRepositoryPath)
         await Files.deleteFile(grpcRepositoryPath)
-        break;
+        break
     }
   }
 
@@ -259,38 +265,44 @@ export class CreateModule {
         await Files.replaceInFile(restRouterPath, '{{name}}', CreateModule.nameEntity)
         await Files.replaceInFile(restRouterPath, '{{nameClean}}', CreateModule.nameClean)
         await Files.replaceInFile(restRouterPath, '{{nameCamel}}', CreateModule.nameCamel)
+        await Files.replaceInFile(restRouterPath, '{{nameKebab}}', CreateModule.nameKebab)
+        await Files.replaceInFile(restRouterPath, '{{repositoryName}}', CreateModule.repositoryName)
         await Files.replaceInFile(restRouterPath, '{{repositoryClean}}', CreateModule.repositoryClean)
 
         await Files.replaceInFile(restControllerPath, '{{nameCamel}}', CreateModule.nameCamel)
         await Files.replaceInFile(restControllerPath, '{{nameCamel}}', CreateModule.nameCamel)
         await Files.replaceInFile(restControllerPath, '{{nameCamel}}', CreateModule.nameCamel)
 
+        await Files.renameFile(restRouterPath, join(CreateModule.modulePath, 'infrastructure/router.ts'))
         await Files.renameFile(restControllerPath, join(CreateModule.modulePath, 'infrastructure/controller.ts'))
 
         await Files.deleteFile(grpcRouterPath)
         await Files.deleteFile(grpcControllerPath)
-        break;
+        break
       case RouterType.GRPC:
         await Files.replaceInFile(grpcRouterPath, '{{name}}', CreateModule.nameEntity)
         await Files.replaceInFile(grpcRouterPath, '{{nameClean}}', CreateModule.nameClean)
         await Files.replaceInFile(grpcRouterPath, '{{nameCamel}}', CreateModule.nameCamel)
+        await Files.replaceInFile(grpcRouterPath, '{{nameKebab}}', CreateModule.nameKebab)
+        await Files.replaceInFile(grpcRouterPath, '{{repositoryName}}', CreateModule.repositoryName)
         await Files.replaceInFile(grpcRouterPath, '{{repositoryClean}}', CreateModule.repositoryClean)
 
         await Files.replaceInFile(grpcControllerPath, '{{nameCamel}}', CreateModule.nameCamel)
         await Files.replaceInFile(grpcControllerPath, '{{nameCamel}}', CreateModule.nameCamel)
         await Files.replaceInFile(grpcControllerPath, '{{nameCamel}}', CreateModule.nameCamel)
 
+        await Files.renameFile(grpcRouterPath, join(CreateModule.modulePath, 'infrastructure/router.ts'))
         await Files.renameFile(grpcControllerPath, join(CreateModule.modulePath, 'infrastructure/controller.ts'))
 
         await Files.deleteFile(restRouterPath)
         await Files.deleteFile(restControllerPath)
-        break;
+        break
       default:
         await Files.deleteFile(grpcRouterPath)
         await Files.deleteFile(grpcControllerPath)
         await Files.deleteFile(restRouterPath)
         await Files.deleteFile(restControllerPath)
-        break;
+        break
     }
   }
 }

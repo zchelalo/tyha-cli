@@ -30,6 +30,15 @@ export class Strings {
   }
 
   /**
+   * Convert a string to kebab-case
+   * @param str - String to convert, may contain spaces or camelCase
+   * @returns kebab-case string
+   */
+  static kebabCase(str: string): string {
+    return str.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()
+  }
+
+  /**
    * Clean a string to be used as a path
    * @param str - String to clean, may contain spaces or special characters
    * @returns Cleaned string

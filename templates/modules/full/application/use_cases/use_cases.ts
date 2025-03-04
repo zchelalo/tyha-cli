@@ -3,7 +3,7 @@ import { {{name}}Value } from 'src/modules/{{nameClean}}/domain/value.js'
 import { DTO{{name}}Create } from 'src/modules/{{nameClean}}/application/dtos/{{nameClean}}_create.js'
 import { DTO{{name}}Response } from 'src/modules/{{nameClean}}/application/dtos/{{nameClean}}_response.js'
 import {
-  get{{name}}ByIDSchema,
+  get{{name}}ByIdSchema,
   paginationSchema
 } from 'src/modules/{{nameClean}}/application/schemas/{{nameClean}}.js'
 
@@ -54,7 +54,7 @@ export class {{name}}UseCase {
    * ```
   */
   public async get{{name}}ById(id: string): Promise<DTO{{name}}Response> {
-    get{{name}}ByIDSchema.parse({ id })
+    get{{name}}ByIdSchema.parse({ id })
 
     const {{nameCamel}}Obtained = await this.{{nameCamel}}Repository.get{{name}}ById(id)
     return new DTO{{name}}Response({{nameCamel}}Obtained)

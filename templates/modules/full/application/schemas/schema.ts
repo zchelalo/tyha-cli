@@ -7,7 +7,7 @@ import { z } from 'zod'
  * 
  * @param {string} id - The id of the {{nameCamel}}, must be a valid uuid.
  */
-export const get{{name}}ByIDSchema = z.object({
+export const get{{name}}ByIdSchema = z.object({
   id: z.string().uuid()
 })
 

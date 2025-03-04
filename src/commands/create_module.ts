@@ -42,7 +42,7 @@ export class CreateModule {
             name = nameAnswer.name
           }
 
-          const moduleTypeAnswers = await inquirer.prompt<Answers>([
+          const { moduleType } = await inquirer.prompt<Answers>([
             {
               type: 'list',
               name: 'moduleType',
@@ -53,7 +53,6 @@ export class CreateModule {
               ]
             }
           ])
-          const moduleType = moduleTypeAnswers.moduleType
 
           if (!await Files.directoryExists('src/modules')) {
             console.error(chalk.red(`Error: No se ha encontrado el directorio "src/modules".`))
@@ -96,32 +95,33 @@ export class CreateModule {
   }
 
   private static async modifyApplicationFiles() {
-    const dtoCreatePath = join(CreateModule.modulePath, 'application/dtos/create.ts')
-    const dtoResponsePath = join(CreateModule.modulePath, 'application/dtos/response.ts')
-    const schemaPath = join(CreateModule.modulePath, 'application/schemas/schema.ts')
-    const useCasesPath = join(CreateModule.modulePath, 'application/use_cases/use_cases.ts')
-
-    await CreateModule.modifyFiles([dtoCreatePath, dtoResponsePath, schemaPath, useCasesPath])
+    await CreateModule.modifyFiles([
+      join(CreateModule.modulePath, 'application/dtos/create.ts'),
+      join(CreateModule.modulePath, 'application/dtos/response.ts'),
+      join(CreateModule.modulePath, 'application/schemas/schema.ts'),
+      join(CreateModule.modulePath, 'application/use_cases/use_cases.ts')
+    ])
   }
 
   private static async modifyInfrastructureFiles() {
-    const { repositoryType, routerType } = await inquirer.prompt<Answers>([
+    const { routerType, repositoryType } = await inquirer.prompt<Answers>([
       {
         type: 'list',
         name: 'routerType',
         message: '¿Qué tipo de router quieres crear?',
-        choices: Object.values(RouterType).map(value => ({ name: Strings.pascalCase(Strings.camelCase(value)), value }))
+        choices: Object.values(RouterType).map(value => ({ name: Strings.snakeToNormal(value), value }))
       },
       {
         type: 'list',
         name: 'repositoryType',
         message: '¿Qué tipo de repositorio quieres crear?',
-        choices: Object.values(RepositoryType).map(value => ({ name: Strings.pascalCase(Strings.camelCase(value)), value }))
+        choices: Object.values(RepositoryType).map(value => ({ name: Strings.snakeToNormal(value), value }))
       }
     ])
 
-    CreateModule.repositoryName = Strings.pascalCase(Strings.camelCase(Strings.clean(repositoryType)))
-    CreateModule.repositoryClean = Strings.clean(repositoryType)
+    const repositoryClean = Strings.clean(repositoryType)
+    CreateModule.repositoryName = Strings.pascalCase(Strings.camelCase(repositoryClean))
+    CreateModule.repositoryClean = repositoryClean
 
     const infraFiles: Record<string, string[]> = {
       [RepositoryType.DRIZZLE]: ['infrastructure/repositories/drizzle.ts'],
@@ -164,7 +164,7 @@ export class CreateModule {
       '{{repositoryName}}': CreateModule.repositoryName || '',
       '{{repositoryClean}}': CreateModule.repositoryClean || '',
     }
-  
+
     for (const [placeholder, value] of Object.entries(replacements)) {
       await Files.replaceInFile(filePath, placeholder, value)
     }

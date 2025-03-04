@@ -14,7 +14,7 @@ export class Strings {
   /**
    * Convert a string to camelCase
    * @param str - String to convert, may contain dashes or underscores
-   * @returns CamelCase string
+   * @returns camelCase string
    */
   static camelCase(str: string): string {
     return str.replace(/[-_]([a-z])/g, (_, g1) => g1.toUpperCase())
@@ -36,6 +36,16 @@ export class Strings {
    */
   static kebabCase(str: string): string {
     return str.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()
+  }
+
+  /**
+   * Convert snake_case to normal text with spaces and first letter capitalized
+   * @param str - String in snake_case
+   * @returns Normalized string
+   */
+  static snakeToNormal(str: string): string {
+    const formatted = str.replace(/_/g, ' ')
+    return this.fistLetterToUpperCase(formatted)
   }
 
   /**

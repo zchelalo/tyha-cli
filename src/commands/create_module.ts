@@ -8,20 +8,65 @@ import { MODULE_ROUTES, ModuleType, RepositoryType, RouterType, TEMPLATES } from
 import { Files } from 'src/utils/files.js'
 import { Strings } from 'src/utils/strings.js'
 
+/**
+ * User answers
+ */
 interface Answers {
+  /**
+   * Module name
+   */
   name: string
+
+  /**
+   * Module type
+   */
   moduleType: ModuleType
+
+  /**
+   * Router type, this is only asked when the module is of type FULL
+   */
   routerType: RouterType
+
+  /**
+   * Repository type, this is only asked when the module is of type FULL
+   */
   repositoryType: RepositoryType
 }
 
 export class CreateModule {
+  /**
+   * Module path
+   */
   private static modulePath: string
+
+  /**
+   * Name of the entity
+   */
   private static nameEntity: string
+
+  /**
+   * Name of the entity clean
+   */
   private static nameClean: string
+
+  /**
+   * Name of the entity in camel case
+   */
   private static nameCamel: string
+
+  /**
+   * Name of the entity in kebab case
+   */
   private static nameKebab: string
+
+  /**
+   * Repository name
+   */
   private static repositoryName: string
+
+  /**
+   * Repository name clean
+   */
   private static repositoryClean: string
 
   /**
@@ -86,6 +131,9 @@ export class CreateModule {
       })
   }
 
+  /**
+   * Modify domain files
+   */
   private static async modifyDomainFiles() {
     await CreateModule.modifyFiles([
       join(CreateModule.modulePath, 'domain/entity.ts'),
@@ -94,6 +142,9 @@ export class CreateModule {
     ])
   }
 
+  /**
+   * Modify application files
+   */
   private static async modifyApplicationFiles() {
     await CreateModule.modifyFiles([
       join(CreateModule.modulePath, 'application/dtos/create.ts'),
@@ -103,6 +154,9 @@ export class CreateModule {
     ])
   }
 
+  /**
+   * Modify infrastructure files
+   */
   private static async modifyInfrastructureFiles() {
     const { routerType, repositoryType } = await inquirer.prompt<Answers>([
       {
@@ -140,6 +194,11 @@ export class CreateModule {
     await CreateModule.deleteUnnecessaryFiles(repositoryType, routerType)
   }
 
+  /**
+   * Modify files
+   * 
+   * @param files - Files to modify
+   */
   private static async modifyFiles(files: string[]) {
     for (const filePath of files) {
       await CreateModule.replacePlaceholders(filePath)
@@ -155,6 +214,11 @@ export class CreateModule {
     }
   }
 
+  /**
+   * Replace placeholders in file
+   * 
+   * @param filePath - File path
+   */
   private static async replacePlaceholders(filePath: string) {
     const replacements: Record<string, string> = {
       '{{name}}': CreateModule.nameEntity,
@@ -170,6 +234,11 @@ export class CreateModule {
     }
   }
 
+  /**
+   * Set name variations
+   * 
+   * @param name - Module name
+   */
   private static setNameVariations(name: string) {
     const clean = Strings.clean(name)
     CreateModule.nameClean = clean
@@ -179,6 +248,12 @@ export class CreateModule {
     CreateModule.modulePath = join('src/modules', clean)
   }
 
+  /**
+   * Delete unnecessary files
+   * 
+   * @param repositoryType - Repository type
+   * @param routerType - Router type
+   */
   private static async deleteUnnecessaryFiles(repositoryType: RepositoryType, routerType: RouterType) {
     const filesToDelete: string[] = []
   

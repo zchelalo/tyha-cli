@@ -5,7 +5,7 @@
   "bin": "./dist/bin/index.js",
   "type": "module",
   "scripts": {
-    "create:docs": "typedoc --entryPointStrategy expand ./src --name 'Tyha CLI test' --out docs",
+    "create:docs": "typedoc --excludePrivate false --excludeProtected false --entryPointStrategy expand ./src --name 'Tyha CLI test' --out docs",
     "build": "ts-patch install && tsc",
     "dev": "nodemon"
   },

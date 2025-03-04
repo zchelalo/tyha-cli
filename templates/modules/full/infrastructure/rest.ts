@@ -14,6 +14,6 @@ const {{nameCamel}}Repository = new {{name}}Repository()
 const useCase = new {{name}}UseCase({{nameCamel}}Repository)
 const {{nameCamel}}Controller = new {{name}}Controller(useCase)
 
-router.get('/{{nameKebab}}/:id', validateData(get{{name}}ByIdSchema, Type.PARAMS), {{nameCamel}}Controller.getById)
+router.get('/{{nameKebab}}/:id', validateData(get{{name}}ByIdSchema, Type.PARAMS), {{nameCamel}}Controller.get{{name}}ById)
 
 export { router }

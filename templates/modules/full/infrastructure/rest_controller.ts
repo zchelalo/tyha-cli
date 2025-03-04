@@ -42,14 +42,13 @@ export class {{name}}Controller {
    * router.get('/{{nameKebab}}', controller.getById)
    * ```
   */
-  public getById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  public get{{name}}ById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const page = parseInt(req.query.page as string) || 0
-      const limit = parseInt(req.query.limit as string) || 0
+      const id = req.param.id
 
-      const {{nameCamel}}Data = await this.useCase.getById(page, limit)
+      const {{nameCamel}}Data = await this.useCase.get{{name}}ById(id)
 
-      res.sendSuccess({ status: 200, message: 'success', data: {{nameCamel}}Data.{{nameCamel}}, meta: {{nameCamel}}Data.meta })
+      res.sendSuccess({ status: 200, message: 'success', data: {{nameCamel}}Data, meta: null })
     } catch (error) {
       next(error)
     }

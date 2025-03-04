@@ -8,43 +8,10 @@ import { MODULE_ROUTES, ModuleType, RepositoryType, RouterType, TEMPLATES } from
 import { Files } from 'src/utils/files.js'
 import { Strings } from 'src/utils/strings.js'
 
-/**
- * Interface for the module name answer
- */
-interface ModuleAnswer {
-  /**
-   * Module name
-   */
+interface Answers {
   name: string
-}
-
-/**
- * Interface for the module type answer
- */
-interface ModuleTypeAnswers {
-  /**
-   * Module type
-   */
   moduleType: ModuleType
-}
-
-/**
- * Interface for the router type answer
- */
-interface RouterTypeAnswers {
-  /**
-   * Router type
-   */
   routerType: RouterType
-}
-
-/**
- * Interface for the repository type answer
- */
-interface RepositoryTypeAnswers {
-  /**
-   * Repository type
-   */
   repositoryType: RepositoryType
 }
 
@@ -69,13 +36,13 @@ export class CreateModule {
       .action(async (name: string | undefined) => {
         try {
           if (!name) {
-            const nameAnswer = await inquirer.prompt<ModuleAnswer>([
+            const nameAnswer = await inquirer.prompt<Answers>([
               { type: 'input', name: 'name', message: '¿Qué nombre tendrá el módulo?' },
             ])
             name = nameAnswer.name
           }
 
-          const moduleTypeAnswers = await inquirer.prompt<ModuleTypeAnswers>([
+          const moduleTypeAnswers = await inquirer.prompt<Answers>([
             {
               type: 'list',
               name: 'moduleType',
@@ -93,11 +60,7 @@ export class CreateModule {
             return
           }
 
-          CreateModule.nameClean = Strings.clean(name)
-          CreateModule.nameCamel = Strings.camelCase(CreateModule.nameClean)
-          CreateModule.nameKebab = Strings.kebabCase(CreateModule.nameCamel)
-          CreateModule.nameEntity = Strings.pascalCase(CreateModule.nameCamel)
-          CreateModule.modulePath = join('src/modules', CreateModule.nameClean)
+          CreateModule.setNameVariations(name)
 
           if (await Files.directoryExists(CreateModule.modulePath)) {
             console.error(chalk.red(`Error: El módulo "${CreateModule.nameEntity}" ya existe.`))
@@ -125,23 +88,11 @@ export class CreateModule {
   }
 
   private static async modifyDomainFiles() {
-    const entityPath = join(CreateModule.modulePath, 'domain/entity.ts')
-    const repositoryPath = join(CreateModule.modulePath, 'domain/repository.ts')
-    const valuePath = join(CreateModule.modulePath, 'domain/value.ts')
-
-    // entity
-    await Files.replaceInFile(entityPath, '{{name}}', CreateModule.nameEntity)
-    await Files.replaceInFile(entityPath, '{{nameCamel}}', CreateModule.nameCamel)
-
-    // repository
-    await Files.replaceInFile(repositoryPath, '{{name}}', CreateModule.nameEntity)
-    await Files.replaceInFile(repositoryPath, '{{nameClean}}', CreateModule.nameClean)
-    await Files.replaceInFile(repositoryPath, '{{nameCamel}}', CreateModule.nameCamel)
-
-    // value
-    await Files.replaceInFile(valuePath, '{{name}}', CreateModule.nameEntity)
-    await Files.replaceInFile(valuePath, '{{nameClean}}', CreateModule.nameClean)
-    await Files.replaceInFile(valuePath, '{{nameCamel}}', CreateModule.nameCamel)
+    await CreateModule.modifyFiles([
+      join(CreateModule.modulePath, 'domain/entity.ts'),
+      join(CreateModule.modulePath, 'domain/repository.ts'),
+      join(CreateModule.modulePath, 'domain/value.ts')
+    ])
   }
 
   private static async modifyApplicationFiles() {
@@ -150,161 +101,110 @@ export class CreateModule {
     const schemaPath = join(CreateModule.modulePath, 'application/schemas/schema.ts')
     const useCasesPath = join(CreateModule.modulePath, 'application/use_cases/use_cases.ts')
 
-    // dtos
-    await Files.replaceInFile(dtoCreatePath, '{{name}}', CreateModule.nameEntity)
-    await Files.replaceInFile(dtoCreatePath, '{{nameClean}}', CreateModule.nameClean)
-    await Files.replaceInFile(dtoCreatePath, '{{nameCamel}}', CreateModule.nameCamel)
-    await Files.replaceInFile(dtoResponsePath, '{{name}}', CreateModule.nameEntity)
-    await Files.replaceInFile(dtoResponsePath, '{{nameClean}}', CreateModule.nameClean)
-    await Files.replaceInFile(dtoResponsePath, '{{nameCamel}}', CreateModule.nameCamel)
-
-    await Files.renameFile(dtoCreatePath, join(CreateModule.modulePath, `application/dtos/${CreateModule.nameClean}_create.ts`))
-    await Files.renameFile(dtoResponsePath, join(CreateModule.modulePath, `application/dtos/${CreateModule.nameClean}_response.ts`))
-
-    // schemas
-    await Files.replaceInFile(schemaPath, '{{name}}', CreateModule.nameEntity)
-    await Files.replaceInFile(schemaPath, '{{nameCamel}}', CreateModule.nameCamel)
-
-    await Files.renameFile(schemaPath, join(CreateModule.modulePath, `application/schemas/${CreateModule.nameClean}.ts`))
-
-    // use cases
-    await Files.replaceInFile(useCasesPath, '{{name}}', CreateModule.nameEntity)
-    await Files.replaceInFile(useCasesPath, '{{nameClean}}', CreateModule.nameClean)
-    await Files.replaceInFile(useCasesPath, '{{nameCamel}}', CreateModule.nameCamel)
-
-    await Files.renameFile(useCasesPath, join(CreateModule.modulePath, `application/use_cases/${CreateModule.nameClean}.ts`))
+    await CreateModule.modifyFiles([dtoCreatePath, dtoResponsePath, schemaPath, useCasesPath])
   }
 
   private static async modifyInfrastructureFiles() {
-    await CreateModule.modifyRepositoryFiles()
-    await CreateModule.modifyRouterFiles()
-  }
-
-  private static async modifyRepositoryFiles() {
-    const repositoryTypeAnswer = await inquirer.prompt<RepositoryTypeAnswers>([
-      {
-        type: 'list',
-        name: 'repositoryType',
-        message: '¿Qué tipo de router quieres crear?',
-        choices: [
-          { name: 'Drizzle ORM', value: RepositoryType.DRIZZLE },
-          { name: 'In memory', value: RepositoryType.IN_MEMORY },
-          { name: 'gRPC Client', value: RepositoryType.GRPC_CLIENT }
-        ]
-      }
-    ])
-    const repositoryType = repositoryTypeAnswer.repositoryType
-
-    const drizzleRepositoryPath = join(CreateModule.modulePath, 'infrastructure/repositories/drizzle.ts')
-    const memoryRepositoryPath = join(CreateModule.modulePath, 'infrastructure/repositories/memory.ts')
-    const grpcRepositoryPath = join(CreateModule.modulePath, 'infrastructure/repositories/grpc.ts')
-
-    switch (repositoryType) {
-      case RepositoryType.DRIZZLE:
-        await Files.replaceInFile(drizzleRepositoryPath, '{{name}}', CreateModule.nameEntity)
-        await Files.replaceInFile(drizzleRepositoryPath, '{{nameClean}}', CreateModule.nameClean)
-        await Files.replaceInFile(drizzleRepositoryPath, '{{nameCamel}}', CreateModule.nameCamel)
-
-        await Files.deleteFile(grpcRepositoryPath)
-        await Files.deleteFile(memoryRepositoryPath)
-
-        CreateModule.repositoryName = Strings.pascalCase(Strings.camelCase(Strings.clean('drizzle')))
-        CreateModule.repositoryClean = Strings.clean('drizzle')
-        break
-      case RepositoryType.IN_MEMORY:
-        await Files.replaceInFile(memoryRepositoryPath, '{{name}}', CreateModule.nameEntity)
-        await Files.replaceInFile(memoryRepositoryPath, '{{nameClean}}', CreateModule.nameClean)
-        await Files.replaceInFile(memoryRepositoryPath, '{{nameCamel}}', CreateModule.nameCamel)
-
-        await Files.deleteFile(grpcRepositoryPath)
-        await Files.deleteFile(drizzleRepositoryPath)
-
-        CreateModule.repositoryName = Strings.pascalCase(Strings.camelCase(Strings.clean('memory')))
-        CreateModule.repositoryClean = Strings.clean('memory')
-        break
-      case RepositoryType.GRPC_CLIENT:
-        await Files.replaceInFile(grpcRepositoryPath, '{{name}}', CreateModule.nameEntity)
-        await Files.replaceInFile(grpcRepositoryPath, '{{nameClean}}', CreateModule.nameClean)
-        await Files.replaceInFile(grpcRepositoryPath, '{{nameCamel}}', CreateModule.nameCamel)
-
-        await Files.deleteFile(drizzleRepositoryPath)
-        await Files.deleteFile(memoryRepositoryPath)
-
-        CreateModule.repositoryName = Strings.pascalCase(Strings.camelCase(Strings.clean('grpc')))
-        CreateModule.repositoryClean = Strings.clean('grpc')
-        break
-      default:
-        await Files.deleteFile(memoryRepositoryPath)
-        await Files.deleteFile(drizzleRepositoryPath)
-        await Files.deleteFile(grpcRepositoryPath)
-        break
-    }
-  }
-
-  private static async modifyRouterFiles() {
-    const routerTypeAnswer = await inquirer.prompt<RouterTypeAnswers>([
+    const { repositoryType, routerType } = await inquirer.prompt<Answers>([
       {
         type: 'list',
         name: 'routerType',
         message: '¿Qué tipo de router quieres crear?',
-        choices: [
-          { name: 'REST Router', value: RouterType.REST },
-          { name: 'gRPC Router', value: RouterType.GRPC }
-        ]
+        choices: Object.values(RouterType).map(value => ({ name: Strings.pascalCase(Strings.camelCase(value)), value }))
+      },
+      {
+        type: 'list',
+        name: 'repositoryType',
+        message: '¿Qué tipo de repositorio quieres crear?',
+        choices: Object.values(RepositoryType).map(value => ({ name: Strings.pascalCase(Strings.camelCase(value)), value }))
       }
     ])
-    const routerType = routerTypeAnswer.routerType
 
-    const restRouterPath = join(CreateModule.modulePath, 'infrastructure/rest.ts')
-    const restControllerPath = join(CreateModule.modulePath, 'infrastructure/rest_controller.ts')
-    const grpcRouterPath = join(CreateModule.modulePath, 'infrastructure/grpc.ts')
-    const grpcControllerPath = join(CreateModule.modulePath, 'infrastructure/grpc_controller.ts')
+    CreateModule.repositoryName = Strings.pascalCase(Strings.camelCase(Strings.clean(repositoryType)))
+    CreateModule.repositoryClean = Strings.clean(repositoryType)
 
-    switch (routerType) {
-      case RouterType.REST:
-        await Files.replaceInFile(restRouterPath, '{{name}}', CreateModule.nameEntity)
-        await Files.replaceInFile(restRouterPath, '{{nameClean}}', CreateModule.nameClean)
-        await Files.replaceInFile(restRouterPath, '{{nameCamel}}', CreateModule.nameCamel)
-        await Files.replaceInFile(restRouterPath, '{{nameKebab}}', CreateModule.nameKebab)
-        await Files.replaceInFile(restRouterPath, '{{repositoryName}}', CreateModule.repositoryName)
-        await Files.replaceInFile(restRouterPath, '{{repositoryClean}}', CreateModule.repositoryClean)
+    const infraFiles: Record<string, string[]> = {
+      [RepositoryType.DRIZZLE]: ['infrastructure/repositories/drizzle.ts'],
+      [RepositoryType.IN_MEMORY]: ['infrastructure/repositories/memory.ts'],
+      [RepositoryType.GRPC_CLIENT]: ['infrastructure/repositories/grpc.ts'],
+      [RouterType.REST]: ['infrastructure/rest.ts', 'infrastructure/rest_controller.ts'],
+      [RouterType.GRPC]: ['infrastructure/grpc.ts', 'infrastructure/grpc_controller.ts']
+    }
 
-        await Files.replaceInFile(restControllerPath, '{{nameCamel}}', CreateModule.nameCamel)
-        await Files.replaceInFile(restControllerPath, '{{nameCamel}}', CreateModule.nameCamel)
-        await Files.replaceInFile(restControllerPath, '{{nameCamel}}', CreateModule.nameCamel)
-        await Files.replaceInFile(restControllerPath, '{{nameKebab}}', CreateModule.nameKebab)
+    for (const type of [repositoryType, routerType]) {
+      if (type) {
+        await CreateModule.modifyFiles(infraFiles[type].map(file => join(CreateModule.modulePath, file)))
+      }
+    }
 
-        await Files.renameFile(restRouterPath, join(CreateModule.modulePath, 'infrastructure/router.ts'))
-        await Files.renameFile(restControllerPath, join(CreateModule.modulePath, 'infrastructure/controller.ts'))
+    await CreateModule.deleteUnnecessaryFiles(repositoryType, routerType)
+  }
 
-        await Files.deleteFile(grpcRouterPath)
-        await Files.deleteFile(grpcControllerPath)
-        break
-      case RouterType.GRPC:
-        await Files.replaceInFile(grpcRouterPath, '{{name}}', CreateModule.nameEntity)
-        await Files.replaceInFile(grpcRouterPath, '{{nameClean}}', CreateModule.nameClean)
-        await Files.replaceInFile(grpcRouterPath, '{{nameCamel}}', CreateModule.nameCamel)
-        await Files.replaceInFile(grpcRouterPath, '{{nameKebab}}', CreateModule.nameKebab)
-        await Files.replaceInFile(grpcRouterPath, '{{repositoryName}}', CreateModule.repositoryName)
-        await Files.replaceInFile(grpcRouterPath, '{{repositoryClean}}', CreateModule.repositoryClean)
-
-        await Files.replaceInFile(grpcControllerPath, '{{nameCamel}}', CreateModule.nameCamel)
-        await Files.replaceInFile(grpcControllerPath, '{{nameCamel}}', CreateModule.nameCamel)
-        await Files.replaceInFile(grpcControllerPath, '{{nameCamel}}', CreateModule.nameCamel)
-        await Files.replaceInFile(grpcControllerPath, '{{nameKebab}}', CreateModule.nameKebab)
-
-        await Files.renameFile(grpcRouterPath, join(CreateModule.modulePath, 'infrastructure/router.ts'))
-        await Files.renameFile(grpcControllerPath, join(CreateModule.modulePath, 'infrastructure/controller.ts'))
-
-        await Files.deleteFile(restRouterPath)
-        await Files.deleteFile(restControllerPath)
-        break
-      default:
-        await Files.deleteFile(grpcRouterPath)
-        await Files.deleteFile(grpcControllerPath)
-        await Files.deleteFile(restRouterPath)
-        await Files.deleteFile(restControllerPath)
-        break
+  private static async modifyFiles(files: string[]) {
+    for (const filePath of files) {
+      await CreateModule.replacePlaceholders(filePath)
+      const newFileName = filePath.replace('schema.ts', `${CreateModule.nameClean}.ts`)
+                                  .replace('use_cases.ts', `${CreateModule.nameClean}.ts`)
+                                  .replace('create.ts', `${CreateModule.nameClean}_create.ts`)
+                                  .replace('response.ts', `${CreateModule.nameClean}_response.ts`)
+                                  .replace('rest.ts', `router.ts`)
+                                  .replace('rest_controller.ts', `controller.ts`)
+                                  .replace('grpc.ts', `router.ts`)
+                                  .replace('grpc_controller.ts', `controller.ts`)
+      await Files.renameFile(filePath, newFileName)
     }
   }
+
+  private static async replacePlaceholders(filePath: string) {
+    const replacements: Record<string, string> = {
+      '{{name}}': CreateModule.nameEntity,
+      '{{nameCamel}}': CreateModule.nameCamel,
+      '{{nameKebab}}': CreateModule.nameKebab,
+      '{{nameClean}}': CreateModule.nameClean,
+      '{{repositoryName}}': CreateModule.repositoryName || '',
+      '{{repositoryClean}}': CreateModule.repositoryClean || '',
+    }
+  
+    for (const [placeholder, value] of Object.entries(replacements)) {
+      await Files.replaceInFile(filePath, placeholder, value)
+    }
+  }
+
+  private static setNameVariations(name: string) {
+    const clean = Strings.clean(name)
+    CreateModule.nameClean = clean
+    CreateModule.nameCamel = Strings.camelCase(clean)
+    CreateModule.nameKebab = Strings.kebabCase(CreateModule.nameCamel)
+    CreateModule.nameEntity = Strings.pascalCase(CreateModule.nameCamel)
+    CreateModule.modulePath = join('src/modules', clean)
+  }
+
+  private static async deleteUnnecessaryFiles(repositoryType: RepositoryType, routerType: RouterType) {
+    const filesToDelete: string[] = []
+  
+    if (repositoryType !== RepositoryType.DRIZZLE) {
+      filesToDelete.push(join(CreateModule.modulePath, 'infrastructure/repositories/drizzle.ts'))
+    }
+    if (repositoryType !== RepositoryType.IN_MEMORY) {
+      filesToDelete.push(join(CreateModule.modulePath, 'infrastructure/repositories/memory.ts'))
+    }
+    if (repositoryType !== RepositoryType.GRPC_CLIENT) {
+      filesToDelete.push(join(CreateModule.modulePath, 'infrastructure/repositories/grpc.ts'))
+    }
+    if (routerType !== RouterType.REST) {
+      filesToDelete.push(join(CreateModule.modulePath, 'infrastructure/rest.ts'))
+      filesToDelete.push(join(CreateModule.modulePath, 'infrastructure/rest_controller.ts'))
+    }
+    if (routerType !== RouterType.GRPC) {
+      filesToDelete.push(join(CreateModule.modulePath, 'infrastructure/grpc.ts'))
+      filesToDelete.push(join(CreateModule.modulePath, 'infrastructure/grpc_controller.ts'))
+    }
+  
+    for (const filePath of filesToDelete) {
+      if (await Files.fileExists(filePath)) {
+        await Files.deleteFile(filePath)
+      }
+    }
+  }
+  
 }

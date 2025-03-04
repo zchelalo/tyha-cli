@@ -1,4 +1,4 @@
-import { UserEntity } from 'src/modules/{{nameClean}}/domain/entity.js'
+import { {{name}}Entity } from 'src/modules/{{nameClean}}/domain/entity.js'
 
 /**
  * {{name}}Repository interface.

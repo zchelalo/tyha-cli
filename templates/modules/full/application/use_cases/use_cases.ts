@@ -7,6 +7,8 @@ import {
   paginationSchema
 } from 'src/modules/{{nameClean}}/application/schemas/{{nameClean}}.js'
 
+import { Meta } from 'src/helpers/meta.js'
+
 /**
  * Create a new {{name}} Use Case.
  * Provides methods to interact with {{nameCamel}} data including retrieving, creating, and counting {{nameCamel}} objects.

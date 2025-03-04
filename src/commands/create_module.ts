@@ -176,6 +176,14 @@ export class CreateModule {
     CreateModule.repositoryName = Strings.pascalCase(repositoryType)
     CreateModule.repositoryClean = Strings.clean(repositoryType)
 
+    if (routerType === RouterType.GRPC) {
+      // TODO: Implement grpc if needed
+    }
+
+    if (repositoryType === RepositoryType.GRPC_CLIENT) {
+      // TODO: Implement grpc client if needed
+    }
+
     const infraFiles: Record<string, string[]> = {
       [RepositoryType.DRIZZLE]: ['infrastructure/repositories/drizzle.ts'],
       [RepositoryType.IN_MEMORY]: ['infrastructure/repositories/memory.ts'],

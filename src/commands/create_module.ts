@@ -53,6 +53,7 @@ export class CreateModule {
   private static nameEntity: string
   private static nameClean: string
   private static nameCamel: string
+  private static repositoryClean: string
 
   /**
    * Create a module command
@@ -172,65 +173,8 @@ export class CreateModule {
   }
 
   private static async modifyInfrastructureFiles() {
-    CreateModule.modifyRouterFiles()
-    CreateModule.modifyRepositoryFiles()
-  }
-
-  private static async modifyRouterFiles() {
-    const routerTypeAnswer = await inquirer.prompt<RouterTypeAnswers>([
-      {
-        type: 'list',
-        name: 'routerType',
-        message: '¿Qué tipo de router quieres crear?',
-        choices: [
-          { name: 'REST Router', value: RouterType.REST },
-          { name: 'gRPC Router', value: RouterType.GRPC }
-        ]
-      }
-    ])
-    const routerType = routerTypeAnswer.routerType
-
-    const restRouterPath = join(CreateModule.modulePath, 'infrastructure/rest.ts')
-    const restControllerPath = join(CreateModule.modulePath, 'infrastructure/rest_controller.ts')
-    const grpcRouterPath = join(CreateModule.modulePath, 'infrastructure/grpc.ts')
-    const grpcControllerPath = join(CreateModule.modulePath, 'infrastructure/grpc_controller.ts')
-
-    switch (routerType) {
-      case RouterType.REST:
-        await Files.replaceInFile(restRouterPath, '{{name}}', CreateModule.nameEntity)
-        await Files.replaceInFile(restRouterPath, '{{nameClean}}', CreateModule.nameClean)
-        await Files.replaceInFile(restRouterPath, '{{nameCamel}}', CreateModule.nameCamel)
-
-        await Files.replaceInFile(restControllerPath, '{{nameCamel}}', CreateModule.nameCamel)
-        await Files.replaceInFile(restControllerPath, '{{nameCamel}}', CreateModule.nameCamel)
-        await Files.replaceInFile(restControllerPath, '{{nameCamel}}', CreateModule.nameCamel)
-
-        await Files.renameFile(restControllerPath, join(CreateModule.modulePath, 'infrastructure/controller.ts'))
-
-        await Files.deleteFile(grpcRouterPath)
-        await Files.deleteFile(grpcControllerPath)
-        break;
-      case RouterType.REST:
-        await Files.replaceInFile(grpcRouterPath, '{{name}}', CreateModule.nameEntity)
-        await Files.replaceInFile(grpcRouterPath, '{{nameClean}}', CreateModule.nameClean)
-        await Files.replaceInFile(grpcRouterPath, '{{nameCamel}}', CreateModule.nameCamel)
-
-        await Files.replaceInFile(grpcControllerPath, '{{nameCamel}}', CreateModule.nameCamel)
-        await Files.replaceInFile(grpcControllerPath, '{{nameCamel}}', CreateModule.nameCamel)
-        await Files.replaceInFile(grpcControllerPath, '{{nameCamel}}', CreateModule.nameCamel)
-
-        await Files.renameFile(grpcControllerPath, join(CreateModule.modulePath, 'infrastructure/controller.ts'))
-
-        await Files.deleteFile(restRouterPath)
-        await Files.deleteFile(restControllerPath)
-        break;
-      default:
-        await Files.deleteFile(grpcRouterPath)
-        await Files.deleteFile(grpcControllerPath)
-        await Files.deleteFile(restRouterPath)
-        await Files.deleteFile(restControllerPath)
-        break;
-    }
+    await CreateModule.modifyRepositoryFiles()
+    await CreateModule.modifyRouterFiles()
   }
 
   private static async modifyRepositoryFiles() {
@@ -260,6 +204,8 @@ export class CreateModule {
 
         await Files.deleteFile(grpcRepositoryPath)
         await Files.deleteFile(memoryRepositoryPath)
+
+        CreateModule.repositoryClean = 'drizzle'
         break;
       case RepositoryType.IN_MEMORY:
         await Files.replaceInFile(memoryRepositoryPath, '{{name}}', CreateModule.nameEntity)
@@ -268,6 +214,8 @@ export class CreateModule {
 
         await Files.deleteFile(grpcRepositoryPath)
         await Files.deleteFile(drizzleRepositoryPath)
+
+        CreateModule.repositoryClean = 'memory'
         break;
       case RepositoryType.GRPC_CLIENT:
         await Files.replaceInFile(grpcRepositoryPath, '{{name}}', CreateModule.nameEntity)
@@ -276,11 +224,72 @@ export class CreateModule {
 
         await Files.deleteFile(drizzleRepositoryPath)
         await Files.deleteFile(memoryRepositoryPath)
+
+        CreateModule.repositoryClean = 'grpc'
         break;
       default:
         await Files.deleteFile(memoryRepositoryPath)
         await Files.deleteFile(drizzleRepositoryPath)
         await Files.deleteFile(grpcRepositoryPath)
+        break;
+    }
+  }
+
+  private static async modifyRouterFiles() {
+    const routerTypeAnswer = await inquirer.prompt<RouterTypeAnswers>([
+      {
+        type: 'list',
+        name: 'routerType',
+        message: '¿Qué tipo de router quieres crear?',
+        choices: [
+          { name: 'REST Router', value: RouterType.REST },
+          { name: 'gRPC Router', value: RouterType.GRPC }
+        ]
+      }
+    ])
+    const routerType = routerTypeAnswer.routerType
+
+    const restRouterPath = join(CreateModule.modulePath, 'infrastructure/rest.ts')
+    const restControllerPath = join(CreateModule.modulePath, 'infrastructure/rest_controller.ts')
+    const grpcRouterPath = join(CreateModule.modulePath, 'infrastructure/grpc.ts')
+    const grpcControllerPath = join(CreateModule.modulePath, 'infrastructure/grpc_controller.ts')
+
+    switch (routerType) {
+      case RouterType.REST:
+        await Files.replaceInFile(restRouterPath, '{{name}}', CreateModule.nameEntity)
+        await Files.replaceInFile(restRouterPath, '{{nameClean}}', CreateModule.nameClean)
+        await Files.replaceInFile(restRouterPath, '{{nameCamel}}', CreateModule.nameCamel)
+        await Files.replaceInFile(restRouterPath, '{{repositoryClean}}', CreateModule.repositoryClean)
+
+        await Files.replaceInFile(restControllerPath, '{{nameCamel}}', CreateModule.nameCamel)
+        await Files.replaceInFile(restControllerPath, '{{nameCamel}}', CreateModule.nameCamel)
+        await Files.replaceInFile(restControllerPath, '{{nameCamel}}', CreateModule.nameCamel)
+
+        await Files.renameFile(restControllerPath, join(CreateModule.modulePath, 'infrastructure/controller.ts'))
+
+        await Files.deleteFile(grpcRouterPath)
+        await Files.deleteFile(grpcControllerPath)
+        break;
+      case RouterType.GRPC:
+        await Files.replaceInFile(grpcRouterPath, '{{name}}', CreateModule.nameEntity)
+        await Files.replaceInFile(grpcRouterPath, '{{nameClean}}', CreateModule.nameClean)
+        await Files.replaceInFile(grpcRouterPath, '{{nameCamel}}', CreateModule.nameCamel)
+        await Files.replaceInFile(grpcRouterPath, '{{repositoryClean}}', CreateModule.repositoryClean)
+
+        await Files.replaceInFile(grpcControllerPath, '{{nameCamel}}', CreateModule.nameCamel)
+        await Files.replaceInFile(grpcControllerPath, '{{nameCamel}}', CreateModule.nameCamel)
+        await Files.replaceInFile(grpcControllerPath, '{{nameCamel}}', CreateModule.nameCamel)
+
+        await Files.renameFile(grpcControllerPath, join(CreateModule.modulePath, 'infrastructure/controller.ts'))
+
+        await Files.deleteFile(restRouterPath)
+        await Files.deleteFile(restControllerPath)
+        break;
+      default:
+        await Files.deleteFile(grpcRouterPath)
+        await Files.deleteFile(grpcControllerPath)
+        await Files.deleteFile(restRouterPath)
+        await Files.deleteFile(restControllerPath)
         break;
     }
   }

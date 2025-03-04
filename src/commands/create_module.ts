@@ -3,7 +3,7 @@ import chalk from 'chalk'
 import inquirer from 'inquirer'
 import { join } from 'path'
 
-import { MODULE_ROUTES, ModuleType, RepositoryType, RouterType, Template, TEMPLATES } from 'src/config/constants.js'
+import { MODULE_ROUTES, ModuleType, RepositoryType, RouterType, TEMPLATES } from 'src/config/constants.js'
 
 import { Files } from 'src/utils/files.js'
 import { Strings } from 'src/utils/strings.js'

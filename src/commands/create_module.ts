@@ -76,13 +76,13 @@ export class CreateModule {
    */
   public static command(): Command {
     return new Command('create:module')
-      .argument('[name]', 'Nombre del módulo')
-      .description('Crea un nuevo modulo')
+      .argument('[name]', 'Module name')
+      .description('Create a new module')
       .action(async (name: string | undefined) => {
         try {
           if (!name) {
             const nameAnswer = await inquirer.prompt<Answers>([
-              { type: 'input', name: 'name', message: '¿Qué nombre tendrá el módulo?' },
+              { type: 'input', name: 'name', message: 'What is the name of the module?' }
             ])
             name = nameAnswer.name
           }
@@ -91,27 +91,27 @@ export class CreateModule {
             {
               type: 'list',
               name: 'moduleType',
-              message: '¿Qué tipo de módulo quieres crear?',
+              message: 'What type of module do you want to create?',
               choices: [
-                { name: 'Módulo con sus tres componentes (domain, application e infraestructura)', value: ModuleType.FULL },
-                { name: 'Módulo con solo el dominio (útil cuando solo se desea crear la entidad)', value: ModuleType.ONLY_DOMAIN }
+                { name: 'Full module (domain, application, and infrastructure)', value: ModuleType.FULL },
+                { name: 'Domain module (only domain)', value: ModuleType.ONLY_DOMAIN }
               ]
             }
           ])
 
           if (!await Files.directoryExists('src/modules')) {
-            console.error(chalk.red(`Error: No se ha encontrado el directorio "src/modules".`))
+            console.error(chalk.red(`Error: directory "src/modules" does not exist.`))
             return
           }
 
           CreateModule.setNameVariations(name)
 
           if (await Files.directoryExists(CreateModule.modulePath)) {
-            console.error(chalk.red(`Error: El módulo "${CreateModule.nameEntity}" ya existe.`))
+            console.error(chalk.red(`Error: module "${CreateModule.nameEntity}" already exists.`))
             return
           }
 
-          console.log(chalk.green(`Creando módulo "${CreateModule.nameEntity}" de tipo ${Strings.firstLetterToUpperCase(moduleType)}...`))
+          console.log(chalk.green(`Creating module "${CreateModule.nameEntity}"...`))
           await Files.copyDirectory(join(TEMPLATES, MODULE_ROUTES[moduleType]), CreateModule.modulePath)
 
           await CreateModule.modifyDomainFiles()
@@ -120,13 +120,13 @@ export class CreateModule {
             await CreateModule.modifyInfrastructureFiles()
           }
 
-          console.log(chalk.blue('Proyecto creado exitosamente'))
+          console.log(chalk.blue('Module created successfully!'))
         } catch (error: unknown) {
           if (error instanceof Error) {
             console.error(chalk.red(`Error: ${error.message}`))
             return
           }
-          console.error(chalk.red('Ha ocurrido un error inesperado.'))
+          console.error(chalk.red('An unexpected error occurred.'))
         }
       })
   }
@@ -162,13 +162,13 @@ export class CreateModule {
       {
         type: 'list',
         name: 'routerType',
-        message: '¿Qué tipo de router quieres crear?',
+        message: 'What type of router do you want to create?',
         choices: Object.values(RouterType).map(value => ({ name: Strings.snakeToNormal(value), value }))
       },
       {
         type: 'list',
         name: 'repositoryType',
-        message: '¿Qué tipo de repositorio quieres crear?',
+        message: 'What type of repository do you want to create?',
         choices: Object.values(RepositoryType).map(value => ({ name: Strings.snakeToNormal(value), value }))
       }
     ])

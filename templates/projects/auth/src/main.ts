@@ -1,8 +1,8 @@
-import 'src/config/index.js'
+import 'src/config/index'
 
-import { Server } from 'src/config/server.js'
+import { Server } from 'src/config/server'
 
-import { router as authRouter } from 'src/modules/auth/infrastructure/router.js'
+import { router as authRouter } from 'src/modules/auth/infrastructure/router'
 
 function main() {
   const server = new Server(

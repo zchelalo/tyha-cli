@@ -1,10 +1,10 @@
-import { UserEntity } from 'src/modules/user/domain/entity.js'
-import { UserRepository } from 'src/modules/user/domain/repository.js'
+import { UserEntity } from 'src/modules/user/domain/entity'
+import { UserRepository } from 'src/modules/user/domain/repository'
 
-import { db } from 'src/data/drizzle/config/orm.js'
-import { user } from 'src/data/drizzle/schemas/index.js'
+import { db } from 'src/data/drizzle/config/orm'
+import { user } from 'src/data/drizzle/schemas/index'
 import { count, desc, eq } from 'drizzle-orm'
-import { ConflictError, NotFoundError } from 'src/helpers/errors/custom_error.js'
+import { ConflictError, NotFoundError } from 'src/helpers/errors/custom_error'
 
 /**
  * PostgresRepository class.

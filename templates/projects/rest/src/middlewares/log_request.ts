@@ -2,7 +2,7 @@
 import { Request, Response, NextFunction } from 'express'
 import { v4 as uuid } from 'uuid'
 
-import { logger } from 'src/helpers/logger.js'
+import { logger } from 'src/helpers/logger'
 
 /**
  * Logs the incoming request and the response status code. This middleware must be used before any other middleware that sends a response.

@@ -1,13 +1,13 @@
-import { UserRepository } from 'src/modules/user/domain/repository.js'
-import { UserValue } from 'src/modules/user/domain/value.js'
-import { DTOUserCreate } from 'src/modules/user/application/dtos/user_create.js'
-import { DTOUserResponse } from 'src/modules/user/application/dtos/user_response.js'
+import { UserRepository } from 'src/modules/user/domain/repository'
+import { UserValue } from 'src/modules/user/domain/value'
+import { DTOUserCreate } from 'src/modules/user/application/dtos/user_create'
+import { DTOUserResponse } from 'src/modules/user/application/dtos/user_response'
 import {
   getUserByIDSchema,
   getUserByEmailSchema,
   paginationSchema,
   createUserSchema
-} from 'src/modules/user/application/schemas/user.js'
+} from 'src/modules/user/application/schemas/user'
 
 import bcrypt from 'bcrypt'
 

@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
-import { UserUseCase } from 'src/modules/user/application/use_cases/user.js'
-import { UserController } from 'src/modules/user/infrastructure/controller.js'
+import { UserUseCase } from 'src/modules/user/application/use_cases/user'
+import { UserController } from 'src/modules/user/infrastructure/controller'
 import jest from 'jest-mock'
 
 // Crea mocks para UserUseCase

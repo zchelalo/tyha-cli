@@ -1,6 +1,6 @@
-import { UserValue } from 'src/modules/user/domain/value.js'
+import { UserValue } from 'src/modules/user/domain/value'
 
-import { userRoles } from 'src/config/constants.js'
+import { userRoles } from 'src/config/constants'
 
 /**
  * Data Transfer Object for Create a User.

@@ -1,10 +1,10 @@
 import express from 'express'
 import http from 'http'
 
-import { MiddlewareConfig } from 'src/config/middleware.js'
-import { RouteConfig } from 'src/config/routes.js'
+import { MiddlewareConfig } from 'src/config/middleware'
+import { RouteConfig } from 'src/config/routes'
 
-import { logger } from 'src/helpers/logger.js'	
+import { logger } from 'src/helpers/logger'	
 
 export class Server {
   private port: number

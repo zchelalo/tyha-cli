@@ -1,4 +1,4 @@
-import 'src/config/index.js'
+import 'src/config/index'
 import { defineConfig } from 'drizzle-kit'
 
 /**

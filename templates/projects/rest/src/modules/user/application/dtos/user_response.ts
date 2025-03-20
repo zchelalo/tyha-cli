@@ -1,4 +1,4 @@
-import { UserValue } from 'src/modules/user/domain/value.js'
+import { UserValue } from 'src/modules/user/domain/value'
 
 /**
  * Data Transfer Object for User Response.

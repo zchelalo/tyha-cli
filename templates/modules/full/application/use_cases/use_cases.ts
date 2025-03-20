@@ -1,13 +1,13 @@
-import { {{name}}Repository } from 'src/modules/{{nameClean}}/domain/repository.js'
-import { {{name}}Value } from 'src/modules/{{nameClean}}/domain/value.js'
-import { DTO{{name}}Create } from 'src/modules/{{nameClean}}/application/dtos/{{nameClean}}_create.js'
-import { DTO{{name}}Response } from 'src/modules/{{nameClean}}/application/dtos/{{nameClean}}_response.js'
+import { {{name}}Repository } from 'src/modules/{{nameClean}}/domain/repository'
+import { {{name}}Value } from 'src/modules/{{nameClean}}/domain/value'
+import { DTO{{name}}Create } from 'src/modules/{{nameClean}}/application/dtos/{{nameClean}}_create'
+import { DTO{{name}}Response } from 'src/modules/{{nameClean}}/application/dtos/{{nameClean}}_response'
 import {
   get{{name}}ByIdSchema,
   paginationSchema
-} from 'src/modules/{{nameClean}}/application/schemas/{{nameClean}}.js'
+} from 'src/modules/{{nameClean}}/application/schemas/{{nameClean}}'
 
-import { Meta } from 'src/helpers/meta.js'
+import { Meta } from 'src/helpers/meta'
 
 /**
  * Create a new {{name}} Use Case.

@@ -1,16 +1,16 @@
 import { Router } from 'express'
 
-import { PostgresRepository as UserPostgresRepository } from 'src/modules/user/infrastructure/repositories/postgres.js'
-import { UserUseCase } from 'src/modules/user/application/use_cases/user.js'
-import { UserController } from 'src/modules/user/infrastructure/controller.js'
+import { PostgresRepository as UserPostgresRepository } from 'src/modules/user/infrastructure/repositories/postgres'
+import { UserUseCase } from 'src/modules/user/application/use_cases/user'
+import { UserController } from 'src/modules/user/infrastructure/controller'
 
-import { validateData, Type } from 'src/middlewares/validator.js'
+import { validateData, Type } from 'src/middlewares/validator'
 
 import {
   createUserSchema,
   getUserByIDSchema,
   paginationSchema
-} from 'src/modules/user/application/schemas/user.js'
+} from 'src/modules/user/application/schemas/user'
 
 const router = Router()
 

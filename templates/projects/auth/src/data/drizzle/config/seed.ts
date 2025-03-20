@@ -1,7 +1,7 @@
-import 'src/config/index.js'
-import { db } from 'src/data/drizzle/config/orm.js'
-import * as schema from 'src/data/drizzle/schemas/index.js'
-import { logger } from 'src/helpers/logger.js'
+import 'src/config/index'
+import { db } from 'src/data/drizzle/config/orm'
+import * as schema from 'src/data/drizzle/schemas/index'
+import { logger } from 'src/helpers/logger'
 import { v4 } from 'uuid'
 
 async function main() {

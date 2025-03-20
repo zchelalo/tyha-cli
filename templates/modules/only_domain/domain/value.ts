@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid'
-import { {{name}}Entity } from 'src/modules/{{nameClean}}/domain/entity.js'
+import { {{name}}Entity } from 'src/modules/{{nameClean}}/domain/entity'
 
 /**
  * {{name}}Value class.

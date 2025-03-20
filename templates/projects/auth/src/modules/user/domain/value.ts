@@ -1,7 +1,7 @@
 import { v4 as uuid } from 'uuid'
-import { UserEntity } from 'src/modules/user/domain/entity.js'
+import { UserEntity } from 'src/modules/user/domain/entity'
 
-import { userRoles } from 'src/config/constants.js'
+import { userRoles } from 'src/config/constants'
 
 /**
  * UserValue class.

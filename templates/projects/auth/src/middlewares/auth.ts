@@ -1,13 +1,13 @@
 import { NextFunction, Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
 
-import { cookieNames, userRoles } from 'src/config/constants.js'
-import { tokenExpiration, TokenType, verifyJWT } from 'src/utils/jwt.js'
-import { durationToMilliseconds } from 'src/utils/time_converter.js'
+import { cookieNames, userRoles } from 'src/config/constants'
+import { tokenExpiration, TokenType, verifyJWT } from 'src/utils/jwt'
+import { durationToMilliseconds } from 'src/utils/time_converter'
 
-import { PostgresRepository as AuthPostgresRepository } from 'src/modules/auth/infrastructure/repositories/postgres.js'
-import { PostgresRepository as UserPostgresRepository } from 'src/modules/user/infrastructure/repositories/postgres.js'
-import { AuthUseCase } from 'src/modules/auth/application/use_cases/auth.js'
+import { PostgresRepository as AuthPostgresRepository } from 'src/modules/auth/infrastructure/repositories/postgres'
+import { PostgresRepository as UserPostgresRepository } from 'src/modules/user/infrastructure/repositories/postgres'
+import { AuthUseCase } from 'src/modules/auth/application/use_cases/auth'
 
 const authRepository = new AuthPostgresRepository()
 const userRepository = new UserPostgresRepository()

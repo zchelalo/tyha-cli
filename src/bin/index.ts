@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 import { Command } from 'commander'
 
-import { CreateProject } from 'src/commands/create_project.js'
-import { CreateModule } from 'src/commands/create_module.js'
+import { CreateProject } from 'src/commands/create_project'
+import { CreateModule } from 'src/commands/create_module'
 
 const program = new Command()
 

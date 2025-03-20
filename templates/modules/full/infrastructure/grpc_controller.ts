@@ -1,13 +1,13 @@
-import { {{name}}UseCase } from 'src/modules/{{nameClean}}/application/use_cases/{{nameClean}}.js'
+import { {{name}}UseCase } from 'src/modules/{{nameClean}}/application/use_cases/{{nameClean}}'
 
 import * as grpc from '@grpc/grpc-js'
 import {
   {{name}},
   Get{{name}}Request,
   Get{{name}}Response,
-} from 'src/proto/{{nameClean}}.js'
-import { handlerErrors } from 'src/helpers/errors/handler.js'
-import { get{{name}}ByIdSchema } from 'src/modules/{{nameClean}}/application/schemas/{{nameClean}}.js'
+} from 'src/proto/{{nameClean}}'
+import { handlerErrors } from 'src/helpers/errors/handler'
+import { get{{name}}ByIdSchema } from 'src/modules/{{nameClean}}/application/schemas/{{nameClean}}'
 
 export class {{name}}Controller {
   private readonly useCase: {{name}}UseCase

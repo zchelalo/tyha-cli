@@ -1,15 +1,15 @@
 import { Router } from 'express'
 
-import { PostgresRepository as UserPostgresRepository } from 'src/modules/user/infrastructure/repositories/postgres.js'
-import { PostgresRepository as AuthPostgresRepository } from 'src/modules/auth/infrastructure/repositories/postgres.js'
-import { AuthUseCase } from 'src/modules/auth/application/use_cases/auth.js'
-import { AuthController } from 'src/modules/auth/infrastructure/controller.js'
+import { PostgresRepository as UserPostgresRepository } from 'src/modules/user/infrastructure/repositories/postgres'
+import { PostgresRepository as AuthPostgresRepository } from 'src/modules/auth/infrastructure/repositories/postgres'
+import { AuthUseCase } from 'src/modules/auth/application/use_cases/auth'
+import { AuthController } from 'src/modules/auth/infrastructure/controller'
 
-import { authMiddleware } from 'src/middlewares/auth.js'
-import { validateData, Type } from 'src/middlewares/validator.js'
+import { authMiddleware } from 'src/middlewares/auth'
+import { validateData, Type } from 'src/middlewares/validator'
 
-import { signInSchema } from 'src/modules/auth/application/schemas/auth.js'
-import { createUserSchema } from 'src/modules/user/application/schemas/user.js'
+import { signInSchema } from 'src/modules/auth/application/schemas/auth'
+import { createUserSchema } from 'src/modules/user/application/schemas/user'
 
 const router = Router()
 

@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid'
-import { UserEntity } from 'src/modules/user/domain/entity.js'
+import { UserEntity } from 'src/modules/user/domain/entity'
 
 /**
  * UserValue class.

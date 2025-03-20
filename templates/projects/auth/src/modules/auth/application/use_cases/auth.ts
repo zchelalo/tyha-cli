@@ -1,20 +1,20 @@
-import { AuthRepository } from 'src/modules/auth/domain/repository.js'
-import { TokenValue } from 'src/modules/auth/domain/value.js'
+import { AuthRepository } from 'src/modules/auth/domain/repository'
+import { TokenValue } from 'src/modules/auth/domain/value'
 
-import { UserRepository } from 'src/modules/user/domain/repository.js'
-import { UserValue } from 'src/modules/user/domain/value.js'
+import { UserRepository } from 'src/modules/user/domain/repository'
+import { UserValue } from 'src/modules/user/domain/value'
 
-import { DTOAuthResponse } from 'src/modules/auth/application/dtos/auth_response.js'
-import { signInSchema, signOutSchema, tokenSchema } from 'src/modules/auth/application/schemas/auth.js'
+import { DTOAuthResponse } from 'src/modules/auth/application/dtos/auth_response'
+import { signInSchema, signOutSchema, tokenSchema } from 'src/modules/auth/application/schemas/auth'
 
-import { DTOUserCreate } from 'src/modules/user/application/dtos/user_create.js'
-import { createUserSchema } from 'src/modules/user/application/schemas/user.js'
+import { DTOUserCreate } from 'src/modules/user/application/dtos/user_create'
+import { createUserSchema } from 'src/modules/user/application/schemas/user'
 
-import { createJWT, JwtPayload, tokenExpiration, TokenType, verifyJWT } from 'src/utils/jwt.js'
-import { durationToMilliseconds } from 'src/utils/time_converter.js'
-import { userRoles } from 'src/config/constants.js'
+import { createJWT, JwtPayload, tokenExpiration, TokenType, verifyJWT } from 'src/utils/jwt'
+import { durationToMilliseconds } from 'src/utils/time_converter'
+import { userRoles } from 'src/config/constants'
 
-import { InternalServerError, UnauthorizedError } from 'src/helpers/errors/custom_error.js'
+import { InternalServerError, UnauthorizedError } from 'src/helpers/errors/custom_error'
 
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'

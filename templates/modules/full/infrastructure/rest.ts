@@ -1,12 +1,12 @@
 import { Router } from 'express'
 
-import { {{repositoryName}}Repository as {{name}}Repository } from 'src/modules/{{nameClean}}/infrastructure/repositories/{{repositoryClean}}.js'
-import { {{name}}UseCase } from 'src/modules/{{nameClean}}/application/use_cases/{{nameClean}}.js'
-import { {{name}}Controller } from 'src/modules/{{nameClean}}/infrastructure/controller.js'
+import { {{repositoryName}}Repository as {{name}}Repository } from 'src/modules/{{nameClean}}/infrastructure/repositories/{{repositoryClean}}'
+import { {{name}}UseCase } from 'src/modules/{{nameClean}}/application/use_cases/{{nameClean}}'
+import { {{name}}Controller } from 'src/modules/{{nameClean}}/infrastructure/controller'
 
-import { validateData, Type } from 'src/middlewares/validator.js'
+import { validateData, Type } from 'src/middlewares/validator'
 
-import { get{{name}}ByIdSchema } from 'src/modules/{{nameClean}}/application/schemas/{{nameClean}}.js'
+import { get{{name}}ByIdSchema } from 'src/modules/{{nameClean}}/application/schemas/{{nameClean}}'
 
 const router = Router()
 

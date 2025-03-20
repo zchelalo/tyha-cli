@@ -3,7 +3,7 @@ import fs from 'fs/promises'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 
-import { userRoles } from 'src/config/constants.js'
+import { userRoles } from 'src/config/constants'
 
 /**
  * Token types for JWT

@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from 'express'
-import { AuthUseCase } from 'src/modules/auth/application/use_cases/auth.js'
+import { AuthUseCase } from 'src/modules/auth/application/use_cases/auth'
 
-import { cookieNames } from 'src/config/constants.js'
-import { durationToMilliseconds } from 'src/utils/time_converter.js'
-import { tokenExpiration, TokenType } from 'src/utils/jwt.js'
+import { cookieNames } from 'src/config/constants'
+import { durationToMilliseconds } from 'src/utils/time_converter'
+import { tokenExpiration, TokenType } from 'src/utils/jwt'
 
-import { UnauthorizedError } from 'src/helpers/errors/custom_error.js'
+import { UnauthorizedError } from 'src/helpers/errors/custom_error'
 
 /**
  * AuthController class.

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import { UserUseCase } from 'src/modules/user/application/use_cases/user.js'
+import { UserUseCase } from 'src/modules/user/application/use_cases/user'
 
 /**
  * UserController class.

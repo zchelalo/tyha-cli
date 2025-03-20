@@ -1,4 +1,4 @@
-import { Meta } from 'src/helpers/meta.js'
+import { Meta } from 'src/helpers/meta'
 
 /**
  * Data type for the response

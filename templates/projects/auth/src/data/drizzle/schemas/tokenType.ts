@@ -1,7 +1,7 @@
 import { relations } from 'drizzle-orm'
 import { pgTable, varchar, timestamp, uuid } from 'drizzle-orm/pg-core'
 
-import { token } from 'src/data/drizzle/schemas/token.js'
+import { token } from 'src/data/drizzle/schemas/token'
 
 export const tokenType = pgTable('token_types', {
   id: uuid('id').primaryKey(),

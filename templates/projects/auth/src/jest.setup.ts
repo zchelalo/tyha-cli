@@ -1,5 +1,5 @@
-import 'src/config/index.js'
-import { logger } from 'src/helpers/logger.js'
+import 'src/config/index'
+import { logger } from 'src/helpers/logger'
 
 const init = async () => {
   logger.info('setup test environment')

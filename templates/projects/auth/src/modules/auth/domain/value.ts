@@ -1,5 +1,5 @@
-import { UserEntity } from 'src/modules/user/domain/entity.js'
-import { AuthEntity } from 'src/modules/auth/domain/entity.js'
+import { UserEntity } from 'src/modules/user/domain/entity'
+import { AuthEntity } from 'src/modules/auth/domain/entity'
 
 import { v4 } from 'uuid'
 

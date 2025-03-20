@@ -1,4 +1,4 @@
-import { userRoles } from 'src/config/constants.js'
+import { userRoles } from 'src/config/constants'
 
 /**
  * Represents a User entity.

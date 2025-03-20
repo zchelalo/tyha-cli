@@ -1,5 +1,5 @@
-import { Pagination } from 'src/utils/pagination.js'
-import { SuccessResponse, ErrorResponse } from 'src/utils/response.js'
+import { Pagination } from 'src/utils/pagination'
+import { SuccessResponse, ErrorResponse } from 'src/utils/response'
 
 declare global {
   namespace Express {

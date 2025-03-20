@@ -1,6 +1,6 @@
-import { MemoryRepository } from 'src/modules/user/infrastructure/repositories/memory.js'
-import { UserUseCase } from 'src/modules/user/application/use_cases/user.js'
-import { NotFoundError } from 'src/helpers/errors/custom_error.js'
+import { MemoryRepository } from 'src/modules/user/infrastructure/repositories/memory'
+import { UserUseCase } from 'src/modules/user/application/use_cases/user'
+import { NotFoundError } from 'src/helpers/errors/custom_error'
 import { ZodError } from 'zod'
 
 describe('User use case', () => {

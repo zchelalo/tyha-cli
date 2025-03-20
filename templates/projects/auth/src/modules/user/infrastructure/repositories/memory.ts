@@ -1,6 +1,6 @@
-import { UserEntity } from 'src/modules/user/domain/entity.js'
-import { UserRepository } from 'src/modules/user/domain/repository.js'
-import { ConflictError, NotFoundError } from 'src/helpers/errors/custom_error.js'
+import { UserEntity } from 'src/modules/user/domain/entity'
+import { UserRepository } from 'src/modules/user/domain/repository'
+import { ConflictError, NotFoundError } from 'src/helpers/errors/custom_error'
 
 const users: UserEntity[] = [
   {

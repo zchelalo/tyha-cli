@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
-import { CustomError } from 'src/helpers/errors/custom_error.js'
-import { logger } from 'src/helpers/logger.js'
+import { CustomError } from 'src/helpers/errors/custom_error'
+import { logger } from 'src/helpers/logger'
 
 /**
  * If the response contains an error, it logs the error message. This is the first error handler in the middleware chain.

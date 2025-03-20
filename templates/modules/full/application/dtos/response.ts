@@ -1,4 +1,4 @@
-import { {{name}}Value } from 'src/modules/{{nameClean}}/domain/value.js'
+import { {{name}}Value } from 'src/modules/{{nameClean}}/domain/value'
 
 /**
  * Data Transfer Object for {{name}} Response.

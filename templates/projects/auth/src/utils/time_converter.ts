@@ -1,4 +1,4 @@
-import { InternalServerError } from 'src/helpers/errors/custom_error.js'
+import { InternalServerError } from 'src/helpers/errors/custom_error'
 
 /**
  * Transform a duration string (in the format of 'Xm', 'Xh' or 'Xd') to milliseconds

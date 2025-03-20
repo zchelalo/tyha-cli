@@ -1,16 +1,16 @@
-import { {{name}}Repository } from 'src/modules/{{nameClean}}/domain/repository.js'
-import { {{name}}Value } from 'src/modules/{{nameClean}}/domain/value.js'
+import { {{name}}Repository } from 'src/modules/{{nameClean}}/domain/repository'
+import { {{name}}Value } from 'src/modules/{{nameClean}}/domain/value'
 
 import {
   {{name}}ServiceClient,
   Get{{name}}Request,
   Get{{name}}Response
-} from 'src/proto/{{nameClean}}.js'
+} from 'src/proto/{{nameClean}}'
 
-import { NotFoundError } from 'src/helpers/errors/custom_error.js'
+import { NotFoundError } from 'src/helpers/errors/custom_error'
 
-import { logger } from 'src/helpers/logger.js'
-import { grpcCodeToError } from 'src/helpers/errors/handler.js'
+import { logger } from 'src/helpers/logger'
+import { grpcCodeToError } from 'src/helpers/errors/handler'
 
 /**
  * {{repositoryName}}Repository class.

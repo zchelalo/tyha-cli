@@ -1,8 +1,8 @@
-import 'src/config/index.js'
+import 'src/config/index'
 
-import { Server } from 'src/config/server.js'
+import { Server } from 'src/config/server'
 
-import { router as userRouter } from 'src/modules/user/infrastructure/router.js'
+import { router as userRouter } from 'src/modules/user/infrastructure/router'
 
 function main() {
   const server = new Server(

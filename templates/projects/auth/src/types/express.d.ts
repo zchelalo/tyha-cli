@@ -1,7 +1,7 @@
-import { Pagination } from 'src/utils/pagination.js'
-import { SuccessResponse, ErrorResponse } from 'src/utils/response.js'
+import { Pagination } from 'src/utils/pagination'
+import { SuccessResponse, ErrorResponse } from 'src/utils/response'
 
-import { userRoles } from 'src/config/constants.js'
+import { userRoles } from 'src/config/constants'
 
 declare global {
   namespace Express {

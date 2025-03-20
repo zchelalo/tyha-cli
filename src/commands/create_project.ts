@@ -3,10 +3,10 @@ import chalk from 'chalk'
 import inquirer from 'inquirer'
 import { join } from 'path'
 
-import { Template, TEMPLATE_ROUTES, TEMPLATES } from 'src/config/constants.js'
+import { Template, TEMPLATE_ROUTES, TEMPLATES } from 'src/config/constants'
 
-import { Files } from 'src/utils/files.js'
-import { Strings } from 'src/utils/strings.js'
+import { Files } from 'src/utils/files'
+import { Strings } from 'src/utils/strings'
 
 interface Answers {
   name: string

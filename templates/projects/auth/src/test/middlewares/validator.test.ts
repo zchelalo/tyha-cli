@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import { z } from 'zod'
 import jest from 'jest-mock'
-import { validateData, Type } from 'src/middlewares/validator.js'
+import { validateData, Type } from 'src/middlewares/validator'
 
 describe('Validate validateData middleware', () => {
   it('should handle non-ZodError exceptions', () => {

@@ -2,11 +2,11 @@ import express from 'express'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 
-import { responseMiddleware } from 'src/middlewares/response.js'
-import { logRequestMiddleware } from 'src/middlewares/log_request.js'
-import { logErrors, unknownErrorHandler, customErrorHandler } from 'src/middlewares/error.js'
+import { responseMiddleware } from 'src/middlewares/response'
+import { logRequestMiddleware } from 'src/middlewares/log_request'
+import { logErrors, unknownErrorHandler, customErrorHandler } from 'src/middlewares/error'
 
-import { ForbiddenError } from 'src/helpers/errors/custom_error.js'
+import { ForbiddenError } from 'src/helpers/errors/custom_error'
 
 export class MiddlewareConfig {
   private app: express.Express

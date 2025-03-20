@@ -1,4 +1,4 @@
-import { app } from 'src/config/server.js'
+import { app } from 'src/config/server'
 import request from 'supertest'
 
 describe('User router', () => {

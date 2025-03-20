@@ -1,10 +1,10 @@
-import { {{name}}Repository } from 'src/modules/{{nameClean}}/domain/repository.js'
-import { {{name}}Value } from 'src/modules/{{nameClean}}/domain/value.js'
+import { {{name}}Repository } from 'src/modules/{{nameClean}}/domain/repository'
+import { {{name}}Value } from 'src/modules/{{nameClean}}/domain/value'
 
-import { db } from 'src/data/drizzle/config/orm.js'
-import { {{nameCamel}} } from 'src/data/drizzle/schemas/index.js'
+import { db } from 'src/data/drizzle/config/orm'
+import { {{nameCamel}} } from 'src/data/drizzle/schemas/index'
 
-import { NotFoundError } from 'src/helpers/errors/custom_error.js'
+import { NotFoundError } from 'src/helpers/errors/custom_error'
 
 /**
  * {{repositoryName}}Repository class.

@@ -1,13 +1,13 @@
 import * as grpc from '@grpc/grpc-js'
 
-import { {{name}}ServiceServer } from 'src/proto/{{nameClean}}.js'
+import { {{name}}ServiceServer } from 'src/proto/{{nameClean}}'
 
-import { {{name}}UseCase } from 'src/modules/{{nameClean}}/application/use_cases/{{nameClean}}.js'
-import { {{repositoryName}}Repository as {{name}}Repository } from 'src/modules/{{nameClean}}/infrastructure/repositories/{{repositoryClean}}.js'
-import { {{name}}Controller } from 'src/modules/{{nameClean}}/infrastructure/controller.js'
+import { {{name}}UseCase } from 'src/modules/{{nameClean}}/application/use_cases/{{nameClean}}'
+import { {{repositoryName}}Repository as {{name}}Repository } from 'src/modules/{{nameClean}}/infrastructure/repositories/{{repositoryClean}}'
+import { {{name}}Controller } from 'src/modules/{{nameClean}}/infrastructure/controller'
 
-import { applyMiddleware } from 'src/middlewares/base.js'
-import { logRequestMiddleware } from 'src/middlewares/log_request.js'
+import { applyMiddleware } from 'src/middlewares/base'
+import { logRequestMiddleware } from 'src/middlewares/log_request'
 
 const {{nameCamel}}Repository = new {{name}}Repository()
 const useCase = new {{name}}UseCase({{nameCamel}}Repository)

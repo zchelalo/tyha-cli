@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import { SuccessResponse, ErrorResponse } from 'src/utils/response.js'
+import { SuccessResponse, ErrorResponse } from 'src/utils/response'
 
 /**
  * This middleware adds the sendSuccess and sendError methods to the response object. The sendSuccess method sends a success response with the status, message, data, and meta properties. The sendError method sends an error response with the status, message, and details properties. This middleware must be used before any other middleware that sends a response.

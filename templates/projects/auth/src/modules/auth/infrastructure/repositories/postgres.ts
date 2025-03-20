@@ -1,11 +1,11 @@
-import { AuthRepository } from 'src/modules/auth/domain/repository.js'
-import { RoleValue, TokenTypeValue, TokenValue } from 'src/modules/auth/domain/value.js'
+import { AuthRepository } from 'src/modules/auth/domain/repository'
+import { RoleValue, TokenTypeValue, TokenValue } from 'src/modules/auth/domain/value'
 
-import { db } from 'src/data/drizzle/config/orm.js'
-import { role, token, tokenType } from 'src/data/drizzle/schemas/index.js'
+import { db } from 'src/data/drizzle/config/orm'
+import { role, token, tokenType } from 'src/data/drizzle/schemas/index'
 import { eq, and } from 'drizzle-orm'
 
-import { NotFoundError } from 'src/helpers/errors/custom_error.js'
+import { NotFoundError } from 'src/helpers/errors/custom_error'
 
 /**
  * PostgresRepository class.

@@ -1,7 +1,7 @@
 import { relations } from 'drizzle-orm'
 import { pgTable, varchar, timestamp, uuid } from 'drizzle-orm/pg-core'
 
-import { user } from 'src/data/drizzle/schemas/user.js'
+import { user } from 'src/data/drizzle/schemas/user'
 
 export const role = pgTable('roles', {
   id: uuid('id').primaryKey(),

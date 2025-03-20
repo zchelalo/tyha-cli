@@ -1,8 +1,8 @@
 import express from 'express'
 import request from 'supertest'
 
-import { responseMiddleware } from 'src/middlewares/response.js'
-import { customErrorHandler, logErrors, unknownErrorHandler } from 'src/middlewares/error.js'
+import { responseMiddleware } from 'src/middlewares/response'
+import { customErrorHandler, logErrors, unknownErrorHandler } from 'src/middlewares/error'
 
 const app = express()
 

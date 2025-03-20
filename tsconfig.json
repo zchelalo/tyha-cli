@@ -1,12 +1,9 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "paths": {
-      "src/*": ["src/*"]
-    },
-    "module": "NodeNext",
+    "module": "esnext",
     "target": "esnext",
-    "moduleResolution": "nodenext",
+    "moduleResolution": "node",
     "allowImportingTsExtensions": false,
     "noEmit": false,
     "esModuleInterop": true,
@@ -18,12 +15,7 @@
     "noImplicitAny": true,
     "resolveJsonModule": true,
     "outDir": "dist",
-    "rootDir": "src",
-    "plugins": [
-      {
-        "transform": "typescript-transform-paths"
-      }
-    ]
+    "rootDir": "src"
   },
-  "exclude": ["node_modules", "dist", "DB", "docs", "templates"]
+  "exclude": ["node_modules", "dist", "DB", "templates"]
 }

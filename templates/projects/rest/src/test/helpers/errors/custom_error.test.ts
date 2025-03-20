@@ -1,4 +1,4 @@
-import { BadRequestError, UnauthorizedError, DatabaseError } from 'src/helpers/errors/custom_error.js'
+import { BadRequestError, UnauthorizedError, DatabaseError } from 'src/helpers/errors/custom_error'
 
 describe('Validate custom errors', () => {
   it('should throw a BadRequestError', () => {

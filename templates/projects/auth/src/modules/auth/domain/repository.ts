@@ -1,4 +1,4 @@
-import { RoleValue, TokenTypeValue, TokenValue } from 'src/modules/auth/domain/value.js'
+import { RoleValue, TokenTypeValue, TokenValue } from 'src/modules/auth/domain/value'
 
 /**
  * AuthRepository interface.
